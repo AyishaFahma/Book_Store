@@ -10,6 +10,8 @@ import Contact from './users/pages/Contact'
 import Viewbook from './users/pages/Viewbook'
 import Profile from './users/pages/Profile'
 import Pagenotfound from './pages/Pagenotfound'
+import Footer from './components/Footer'
+import Preloader from './components/Preloader'
 
 
 
@@ -22,7 +24,7 @@ function App() {
       <Routes>
 
         {/* users page path */}
-        <Route path='/' element={<Landingpage />} />
+        <Route path='/' element={<Preloader />} />
 
         <Route path='/login' element={ <Auth />} />
 
@@ -52,6 +54,8 @@ function App() {
         <Route path='*' element={<Pagenotfound />} />
 
       </Routes>
+
+      <Footer/>
 
     </>
   )
