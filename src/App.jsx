@@ -40,6 +40,11 @@ function App() {
 
         <Route path='/profile' element={<Profile />} />
 
+        {/* example */}
+        <Route path='/landing' element={<Landingpage />} />
+
+
+
 
 
 
@@ -55,7 +60,7 @@ function App() {
 
       </Routes>
 
-      <Footer/>
+      {/* <Footer/> */}
 
     </>
   )

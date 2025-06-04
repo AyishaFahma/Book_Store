@@ -7,14 +7,14 @@ function Footer() {
   return (
     <>
     {/* first portion */}
-    <div className='bg-blue-950 p-5 md:p-10 md:grid grid-cols-3 text-white'>
+    <div className='bg-blue-950 p-5 md:p-10 md:grid grid-cols-3 text-white mt-10'>
 
       <div>
         <h1 className='text-2xl'>ABOUT US</h1>
         <p className='mt-3 text-justify'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique mollitia est odio quos amet quibusdam ex ducimus, ut provident velit quae a fuga expedita at illum enim, maiores doloremque quis.</p>
       </div>
 
-      <div className='flex justify-center '>
+      <div className='md:flex justify-center mt-10 md:mt-0'>
         <div>
           <h1 className='text-2xl'>NEWS LETTER</h1>
           <p className='mt-3'>Stay updated with our latest trends</p>
@@ -25,7 +25,7 @@ function Footer() {
         </div>
       </div>
 
-      <div>
+      <div className='mt-10 md:mt-0'>
         <h1 className='text-2xl'>FOLLOW US</h1>
         <p className='mt-3'>Let us be social</p>
         <div className='flex mt-3'>
