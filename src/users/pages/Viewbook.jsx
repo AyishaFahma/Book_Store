@@ -1,8 +1,76 @@
 import React from 'react'
+import Header from '../components/Header'
+import Footer from '../../components/Footer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBackward } from '@fortawesome/free-solid-svg-icons'
 
 function Viewbook() {
   return (
-    <div>Viewbook</div>
+    <>
+
+      < Header />
+
+      <div className='md:grid grid-cols-[2fr_5fr] gap-x-20 md:p-10 p-5 my-15 md:mx-20 mx-5 shadow-lg/30 border border-gray-300'>
+
+        {/* image of book */}
+
+        <div className='mb-10 md:mb-0'>
+          <img src="https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg" alt="no book image" className='w-full' style={{ height: '500px' }} />
+        </div>
+
+        {/* book details main sec */}
+        <div>
+          <h1 className='text-center md:text-2xl text-lg font-bold'>Ikigai: The Japanese Secret to a Long and Happy Life</h1>
+          <p className='text-center mt-3 text-blue-700'>-Héctor García, Francesc Miralles-</p>
+
+          {/* grid for inner details of book */}
+          <div className="md:grid grid-cols-3 my-15 gap-x-20 ">
+
+            <div >
+              <p className='font-[600] mb-4 '>Publisher : Penguin Life</p>
+              <p className='font-[600] mb-4'>Seller Mail : maxwell@gmail.com</p>
+
+            </div>
+            <div className='font-[600] '>
+              <p className='mb-4'>Language : English</p>
+              <p className='mb-4'>Real Price : $ 15</p>
+            </div>
+            <div className='font-[600]'>
+              <p className='mb-4'>No. of pages : 208</p>
+              <p className='mb-4'>ISBN: 978-0143130727</p>
+            </div>
+
+          </div>
+
+
+
+
+
+          {/* last paragraph */}
+          <p className='font-[600] text-justify'>Ikigai is a Japanese concept that combines the words "iki"(life) and "gai"(worth).The book explores the principles of Ikigai,or the reason for being, and how it leads to a long,fulfilling,and happy life.It presents the stories of the people from Okinawa,the place with the highest life expectancy,to understand their ways of living and what keeps them happy.authors blend the ancient wisdom of the Japanese with modern psychological principles to offer insights on how to live a more meaningful and purpose-driven life.</p>
+
+          <div className="md:grid grid-cols-3">
+            <div></div>
+            <div></div>
+            <div className='mt-20 justify-between flex'>
+              <button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center'><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button>
+
+              <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>13</span></button>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+
+
+      </div>
+
+      < Footer />
+
+    </>
   )
 }
 
