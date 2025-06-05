@@ -12,6 +12,7 @@ import Profile from './users/pages/Profile'
 import Pagenotfound from './pages/Pagenotfound'
 import Footer from './components/Footer'
 import Preloader from './components/Preloader'
+import { useEffect, useState } from 'react'
 
 
 
@@ -19,16 +20,28 @@ import Preloader from './components/Preloader'
 
 function App() {
 
+  // create a state to initially shows the preloader and after a perticular time it will display landing page
+
+  const [isloading, setIsloading] = useState(false)
+
+  useEffect( () => {
+    setTimeout( () =>{
+
+    setIsloading(true)
+
+  },7000)
+  },[])
+
   return (
     <>
       <Routes>
 
         {/* users page path */}
-        <Route path='/' element={<Preloader />} />
+        <Route path='/' element={ isloading ?  <Landingpage /> : <Preloader /> } />
 
         <Route path='/login' element={ <Auth />} />
 
-        <Route path='/register' element={<Auth />} />
+        <Route path='/register' element={<Auth register />} />
 
         <Route path='/all-books' element={<Allbooks />} />
 
@@ -40,8 +53,7 @@ function App() {
 
         <Route path='/profile' element={<Profile />} />
 
-        {/* example */}
-        <Route path='/landing' element={<Landingpage />} />
+        
 
 
 

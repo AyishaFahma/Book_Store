@@ -66,6 +66,9 @@ function Landingpage() {
           </div>
 
 
+          <p className='text-center'>Loading....</p>
+
+
 
         </div>
 
