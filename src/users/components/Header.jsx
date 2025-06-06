@@ -41,7 +41,7 @@ function Header() {
         </div>
       </div>
 
-      {/* nav bar below contents */}
+      {/* nav bar below contents for small screens */}
 
       <nav className='bg-blue-950 p-3'>
 
