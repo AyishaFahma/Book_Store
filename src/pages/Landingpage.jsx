@@ -3,6 +3,7 @@ import Header from '../users/components/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Footer from '../components/Footer'
+import { Link } from 'react-router-dom'
 
 function Landingpage() {
   return (
@@ -66,13 +67,18 @@ function Landingpage() {
           </div>
 
 
-          <p className='text-center'>Loading....</p>
+          
 
 
 
         </div>
 
-        <div className='flex justify-center items-center md:my-10'><button className='bg-blue-950 text-white py-3 px-5 hover:bg-white hover:border hover:border-blue-950 hover:text-blue-950 cursor-pointer'>Explore More</button></div>
+        <p className='text-center'>Loading....</p>
+
+        <div className='flex justify-center items-center md:my-10'>
+          <Link to={'/all-books'}><button className='bg-blue-950 text-white py-3 px-5 hover:bg-white hover:border hover:border-blue-950 hover:text-blue-950 cursor-pointer'>Explore More</button></Link>
+        </div>
+
       </div>
 
       {/* features sec */}

@@ -32,7 +32,7 @@ function Viewbook() {
           <div className='flex items-baseline justify-end '><button onClick={()=>setModalStatus(true)} className='text-2xl text-gray-600 cursor-pointer'><FontAwesomeIcon icon={faEye} /></button></div>
 
 
-
+         {/* modal  */}
 
          { modalStatus && <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
@@ -44,10 +44,13 @@ function Viewbook() {
                 <div className="relative transform overflow-hidden rounded bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
                   <div className="bg-white">
 
+                    {/* header of modal */}
+
                     <div className='bg-blue-950 p-4 text-white flex justify-between items-center'>
                       <p className='text-xl'>Book Photos</p>
                       < FontAwesomeIcon icon={faXmark} className='fa-2x cursor-pointer' onClick={()=>setModalStatus(false)} />
                     </div>
+                    {/* body of modal */}
                     <div className='p-4'>
                       <h1 className='text-blue-500'><FontAwesomeIcon icon={faCamera} className='me-3'/> Camera click of the book in the hand of seller</h1>
 

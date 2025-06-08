@@ -12,7 +12,7 @@ function Careers() {
 
       <Header />
 
-
+      {/* heading portion */}
       <div className='md:grid grid-cols-[1fr_4fr_1fr]  my-10'>
         <div></div>
         <div className='p-5'>
@@ -24,6 +24,8 @@ function Careers() {
 
       <h1 className='md:ms-20 ms-5 text-2xl my-10'>Current Opening</h1>
 
+      {/* search box */}
+
       <div className="md:grid grid-cols-3 my-10">
         <div></div>
         <div className='flex md:px-0 px-2'>
@@ -34,18 +36,19 @@ function Careers() {
         <div></div>
       </div>
 
-
-      <div className='md:grid grid-cols-[1fr_4fr_1fr]  my-10'>
+     {/* contents for job openings sec */}
+      <div className='md:grid grid-cols-[1fr_4fr_1fr]  my-10 px-4 md:px-0'>
         <div></div>
+
         <div className='p-5 shadow-lg rounded border border-gray-200'>
-          <div className="md:grid grid-cols-[8fr_1fr]">
+          <div className="grid grid-cols-[8fr_1fr]">
             <div>
               <h1 className='text-xl'>Job Title</h1>
               <hr className='border-gray-300 mt-3' />
             </div>
 
-            <div>
-              <button onClick={() => setModalStatus(true)} className='bg-blue-900 px-4 py-2 rounded text-white ms-4'>Apply < FontAwesomeIcon icon={faSquareArrowUpRight} className='ms-1' /></button>
+            <div >
+              <button onClick={() => setModalStatus(true)} className='bg-blue-900 px-4 py-2 rounded text-white ms-4'>Apply< FontAwesomeIcon icon={faSquareArrowUpRight} className='ms-1' /></button>
             </div>
 
           </div>
@@ -83,6 +86,7 @@ function Careers() {
                   <p className='text-xl'>Application form</p>
                   < FontAwesomeIcon icon={faXmark} className='fa-2x cursor-pointer' onClick={() => setModalStatus(false)} />
                 </div>
+
                 {/* modal body */}
                 <div className='p-4'>
 
@@ -113,7 +117,7 @@ function Careers() {
                   </div>
 
                   <div className='px-2 mb-3'>
-                    <input type='file' placeholder='Phone' className='border border-gray-200 w-full rounded file:bg-gray-300 file:p-2 file:text-gray-600'
+                    <input type='file' className='border border-gray-200 w-full rounded file:bg-gray-400 file:p-2 file:text-gray-800'
                     />
                   </div>
 
@@ -121,10 +125,10 @@ function Careers() {
 
                 {/* modal footer */}
 
-                <div className='bg-gray-300 px-4 py-3 sm:flex-row-reverse sm:px-6'>
-                  <button className='bg-orange-500 rounded text-xl py-2 px-5 text-white hover:bg-orange-700  items-center'>Reset</button>
+                <div className='bg-gray-300 px-4 py-3 sm:flex  sm:flex-row-reverse sm:px-6'>
+                  <button type='button' className='inline-flex w-full justify-center bg-orange-500 rounded md:text-xl py-2 px-4 text-white hover:bg-orange-700 sm:ml-3 sm:w-auto'>Reset</button>
 
-                  <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>Submit</button>
+                  <button type='button' className='inline-flex w-full justify-center bg-green-700 rounded md:text-xl py-2 px-4 text-white hover:bg-green-500 sm:w-auto mt-3 sm:mt-0'>Submit</button>
                 </div>
 
 
