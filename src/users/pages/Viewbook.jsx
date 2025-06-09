@@ -104,11 +104,11 @@ function Viewbook() {
           {/* last paragraph */}
           <p className='font-[600] text-justify'>Ikigai is a Japanese concept that combines the words "iki"(life) and "gai"(worth).The book explores the principles of Ikigai,or the reason for being, and how it leads to a long,fulfilling,and happy life.It presents the stories of the people from Okinawa,the place with the highest life expectancy,to understand their ways of living and what keeps them happy.authors blend the ancient wisdom of the Japanese with modern psychological principles to offer insights on how to live a more meaningful and purpose-driven life.</p>
 
-          <div className="md:grid grid-cols-3">
+          <div className="md:grid grid-cols-3 ">
             <div></div>
             <div></div>
-            <div className='mt-20 justify-between flex'>
-              <button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center'><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button>
+            <div className='mt-20 justify-between flex gap-x-5'>
+              <button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center '><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button>
 
               <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>13</span></button>
             </div>

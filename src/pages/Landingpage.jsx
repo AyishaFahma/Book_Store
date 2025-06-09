@@ -19,7 +19,7 @@ function Landingpage() {
           <p className='md:text-xl mt-5'>Give your family and friends a book</p>
 
           <div className='bg-white rounded-full mt-10'>
-            <input type="text" placeholder='Search Books' className='md:py-3 py-2 md:px-50 px-10 text-black text-center' />
+            <input type="text" placeholder='Search Books' className='md:py-3 py-2 md:px-50 px-10 text-black text-center rounded-full outline-0' />
             <button><FontAwesomeIcon icon={faMagnifyingGlass} className='text-blue-500 text-xl me-5 cursor-pointer' /></button>
           </div>
         </div>
