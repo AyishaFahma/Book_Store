@@ -7,7 +7,7 @@ function Footer() {
   return (
     <>
     {/* first portion */}
-    <div className='bg-blue-950 p-5 md:p-10 md:grid grid-cols-3 text-white mt-10'>
+    <div className='bg-blue-950 p-5 md:p-10 md:grid grid-cols-3 text-white '>
 
       <div>
         <h1 className='text-2xl'>ABOUT US</h1>

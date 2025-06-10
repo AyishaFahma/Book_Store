@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCamera, faEye, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom'
 
 function Viewbook() {
 
@@ -108,7 +109,7 @@ function Viewbook() {
             <div></div>
             <div></div>
             <div className='mt-20 justify-between flex gap-x-5'>
-              <button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center '><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button>
+              <Link to={'/all-books'}><button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center '><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button></Link>
 
               <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>13</span></button>
             </div>

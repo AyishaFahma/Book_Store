@@ -13,6 +13,10 @@ import Pagenotfound from './pages/Pagenotfound'
 import Footer from './components/Footer'
 import Preloader from './components/Preloader'
 import { useEffect, useState } from 'react'
+import Adminhome from './admin/pages/Adminhome'
+import Adminbooks from './admin/pages/Adminbooks'
+import Admincareers from './admin/pages/Admincareers'
+import Adminsettings from './admin/pages/Adminsettings'
 
 
 
@@ -37,6 +41,7 @@ function App() {
       <Routes>
 
         {/* users page path */}
+
         <Route path='/' element={ isloading ?  <Landingpage /> : <Preloader /> } />
 
         <Route path='/login' element={ <Auth />} />
@@ -53,18 +58,19 @@ function App() {
 
         <Route path='/profile' element={<Profile />} />
 
+
+
+        {/* path for admin pages */}
+
+        <Route path='/admin-home' element={<Adminhome/>}/>
+
+        <Route path='/admin-books' element={<Adminbooks/>}/>
+
+        <Route path='/admin-careers' element={<Admincareers/>}/>
+
+        <Route path='/admin-setting' element={<Adminsettings/>}/>
+
         
-
-
-
-
-
-
-
-
-
-
-
 
 
 
