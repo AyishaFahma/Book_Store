@@ -126,9 +126,9 @@ const data02 = [
                 <div className='flex justify-center items-center'>
                   <FontAwesomeIcon icon={faBook} className='fa-3x' />
                 </div>
-                <div>
+                <div className='text-center'>
                   <h1 className='text-2xl'>Total number of Books</h1>
-                  <h1 className='text-xl'>100+</h1>
+                  <h1 className='text-xl '>100+</h1>
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ const data02 = [
                 <div className='flex justify-center items-center'>
                   <FontAwesomeIcon icon={faUsers} className='fa-3x' />
                 </div>
-                <div>
+                <div className='text-center'>
                   <h1 className='text-2xl'>Total number of Users</h1>
                   <h1 className='text-xl'>100+</h1>
                 </div>
@@ -153,7 +153,7 @@ const data02 = [
                 <div className='flex justify-center items-center'>
                   <FontAwesomeIcon icon={faUserTie} className='fa-3x' />
                 </div>
-                <div>
+                <div className='text-center'>
                   <h1 className='text-2xl'>Total number of Employee</h1>
                   <h1 className='text-xl'>100+</h1>
                 </div>
@@ -166,10 +166,10 @@ const data02 = [
           <div className="md:grid grid-cols-2 px-5 my-10">
 
             {/* bar chart */}
-            <div>
+            <div style={{width:'100%' , height:'500px'}} className='px-10'>
               {/* responsive container are used to place the chart in responsive way */}
-              <ResponsiveContainer width={'100%'} height={'100%'}>
-                <BarChart width={730} height={250} data={data}>
+              <ResponsiveContainer width='100%' height='100%'>
+                <BarChart  data={data}>
                   {/* type of chart used */}
                   {/* here the data attribute reperent the data which holds the data to be displayed */}
                   <CartesianGrid strokeDasharray="3 3" />
@@ -190,9 +190,9 @@ const data02 = [
             </div>
 
             {/* pichart */}
-            <div>
-              <ResponsiveContainer>
-                <PieChart width={730} height={250}>
+            <div style={{width:'100%' , height:'500px'}} className='px-10'>
+              <ResponsiveContainer width='100%' height='100%'>
+                <PieChart >
                   <Pie data={data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
                   <Pie data={data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label />
                 </PieChart>
