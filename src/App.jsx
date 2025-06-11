@@ -68,7 +68,7 @@ function App() {
 
         <Route path='/admin-careers' element={<Admincareers/>}/>
 
-        <Route path='/admin-setting' element={<Adminsettings/>}/>
+        <Route path='/admin-settings' element={<Adminsettings/>}/>
 
         
 
