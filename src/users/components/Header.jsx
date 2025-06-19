@@ -1,7 +1,7 @@
 import { faFacebook, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faAddressCard, faBars, faPerson, faPowerOff, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function Header() {
@@ -9,6 +9,18 @@ function Header() {
   const [clickStatus, setClickStatus] = useState(false)
 
   const [dropdownStatus, setdropDownStatus] = useState(false)
+
+  //login cheytha alkke token ullu session storagil so token ndeel profile button else login button , so state create to get token when page loads
+
+  const [token, settoken] = useState("")
+
+  useEffect( ()=>{
+    // if session storagil token ndoo check chyyum
+
+    if(sessionStorage.getItem("token")){
+      settoken(sessionStorage.getItem("token"))
+    }
+  })
   return (
     <>
 
@@ -33,13 +45,18 @@ function Header() {
 
           <div className='md:flex hidden'>
 
-            <Link to={'/login'}>
+            {/* conditional rendering based on if token present or not */}
+
+            { !token ? <Link to={'/login'}>
               <button className='px-4 py-3 ms-5 border border-black rounded cursor-pointer'><FontAwesomeIcon icon={faUser} className='me-2' />Login
               </button>
             </Link>
 
-            {/* dropdown button */}
-            {/* <div className="relative inline-block text-left">
+            :
+
+            // {/* dropdown button */}
+
+            <div className="relative inline-block text-left">
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
@@ -61,7 +78,7 @@ function Header() {
                 </div>
               </div>
               }
-            </div> */}
+            </div> }
 
             {/* end of dropdown button */}
 
@@ -78,13 +95,13 @@ function Header() {
 
           <span onClick={() => setClickStatus(!clickStatus)} className='text-white text-2xl'><FontAwesomeIcon icon={faBars} /></span>
 
-          <Link to={'/login'}>
+          { !token ? <Link to={'/login'}>
             <button className='px-4 py-3 ms-5 border border-white rounded text-white cursor-pointer'><FontAwesomeIcon icon={faUser} className='me-2' />Login
             </button>
           </Link>
-
-          {/* dropdown button */}
-            {/* <div className="relative inline-block text-left">
+                   :
+          // {/* dropdown button */}
+            <div className="relative inline-block text-left">
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md  px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
@@ -106,7 +123,7 @@ function Header() {
                 </div>
               </div>
               }
-            </div> */}
+            </div> }
 
             {/* end of dropdown button */}
 

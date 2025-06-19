@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faLanguage, faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
 
 function Profile() {
@@ -12,6 +12,49 @@ function Profile() {
   const [bookStatus, setBookStatus] = useState(false)
 
   const [purchaseStatus, setPurchaseStatus] = useState(false)
+
+  // state is created to store book details in sellbook 
+  const [bookDetails, setbookDetails] = useState( {
+
+    title : "" ,
+    author : "" ,
+    publisher : "" ,
+    language : "" ,
+    noofpages : "" ,
+    isbn : "" ,
+    imageUrl : "" ,
+    category : "" ,
+    price : "" ,
+    dprice : "" ,
+    abstract : "" ,
+    uploadImages : []
+
+  })
+
+  // console.log(bookDetails);
+
+
+  // image button click to add images from system
+  const handleUpload = (e) =>{
+    // here, input boxine kittam e.target kodtha mathi input type text ayathukond ath e.target.value- data kittm . but here file so .files kodkkanam
+    console.log(e.target.files);
+
+    // here the data is= FileList {0: File, length: 1} as an object with 0 keyilanu image nte details 
+    // then uploadeImage nnu paranja state nte keyilekk add cheyyanam athinu vendi ee full images ne fileArray variable store akki
+
+    const fileArray = bookDetails.uploadImages
+    fileArray.push(e.target.files[0])
+
+    setbookDetails( {...bookDetails , uploadImages:fileArray})
+
+    // createObjectURL() - to convert a file into url. coz we wnat to display the book image and the book images are in src so in src it only take url form
+
+
+
+    
+
+  }
+  
 
 
   return (
@@ -64,48 +107,63 @@ function Profile() {
 
             <div className="md:grid grid-cols-2 gap-x-5">
               <div className='my-10'>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='Title' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.title} onChange={(e) => setbookDetails({...bookDetails , title:e.target.value})} type="text" placeholder='Title' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='Author' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.author} onChange={(e) => setbookDetails({...bookDetails , author:e.target.value})} type="text" placeholder='Author' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='No of Pages' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.noofpages} onChange={(e) => setbookDetails({...bookDetails , noofpages:e.target.value})} type="text" placeholder='No of Pages' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='Image Url' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.imageUrl} onChange={(e) => setbookDetails({...bookDetails , imageUrl:e.target.value})} type="text" placeholder='Image Url' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='Price' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.price} onChange={(e) => setbookDetails({...bookDetails , price:e.target.value})} type="text" placeholder='Price' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <input type="text" placeholder='Discount Price' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.dprice} onChange={(e) => setbookDetails({...bookDetails , dprice:e.target.value})} type="text" placeholder='Discount Price' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
+
                 <div className="mb-3">
-                  <textarea placeholder='Abstract' rows={'8'} className='p-2 bg-white rounded w-full outline-0'></textarea>
+                  <textarea value={bookDetails.abstract} onChange={(e) => setbookDetails({...bookDetails , abstract:e.target.value})} placeholder='Abstract' rows={'8'} className='p-2 bg-white rounded w-full outline-0'></textarea>
                 </div>
+
               </div>
 
 
               <div className='my-10 px-2'>
 
                 <div className="mb-3">
-                  <input type="text" placeholder='Publisher' className='p-2 bg-white rounded w-full outline-0' />
-                </div>
-                <div className="mb-3">
-                  <input type="text" placeholder='Language' className='p-2 bg-white rounded w-full outline-0' />
-                </div>
-                <div className="mb-3">
-                  <input type="text" placeholder='ISBN' className='p-2 bg-white rounded w-full outline-0' />
-                </div>
-                <div className="mb-3">
-                  <input type="text" placeholder='Category' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.publisher} onChange={(e) => setbookDetails({...bookDetails , publisher:e.target.value})} type="text" placeholder='Publisher' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
+                <div className="mb-3">
+                  <input value={bookDetails.language} onChange={(e) => setbookDetails({...bookDetails , language:e.target.value})} type="text" placeholder='Language' className='p-2 bg-white rounded w-full outline-0' />
+                </div>
+
+                <div className="mb-3">
+                  <input value={bookDetails.isbn} onChange={(e) => setbookDetails({...bookDetails , isbn:e.target.value})} type="text" placeholder='ISBN' className='p-2 bg-white rounded w-full outline-0' />
+                </div>
+
+                <div className="mb-3">
+                  <input value={bookDetails.category} onChange={(e) => setbookDetails({...bookDetails , category:e.target.value})} type="text" placeholder='Category' className='p-2 bg-white rounded w-full outline-0' />
+                </div>
+
+
+
+
                 <div className='flex justify-center items-center mt-10 flex-col'>
+
                   <label htmlFor="uploadBookImg">
-                    <input type="file" id='uploadBookImg' style={{ display: 'none' }} />
+                    <input type="file" id='uploadBookImg' style={{ display: 'none' }} onChange={(e) =>handleUpload(e)} />
                     <img src="https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929_1280.png" alt="no image" style={{ width: '200px', height: '200px' }} />
                   </label>
 

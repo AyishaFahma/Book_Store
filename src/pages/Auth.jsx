@@ -45,7 +45,7 @@ function Auth({ register }) {
         navigate('/login')
       }
       // user kodkkunna data already dbyil ndeel ee block work avum
-      else if (result.status == 406){
+      else if (result.status == 406) {
         toast.warning(result.response.data)
         // so after this message state/input field is cleared
         setUserDetails({
@@ -56,7 +56,7 @@ function Auth({ register }) {
 
       }
       // server side error
-      else{
+      else {
         toast.error('Something went wrong')
         setUserDetails({
           username: "",
@@ -70,20 +70,58 @@ function Auth({ register }) {
   }
 
   // login button
-  const handleLogin = async() =>{
-    const { email , password } = userDetails
+  const handleLogin = async () => {
+    const { email, password } = userDetails
 
-    if( !email || !password ){
+    if (!email || !password) {
       toast.info('Please enter all details')
     }
-    else{
-      
-      //api calling
-      const result = await loginApi( {email,password})
-      console.log(result);
+    else {
 
-      
-      
+      //api calling
+      const result = await loginApi({ email, password })
+      console.log(result);
+      // response 200 seriesilanu server nnu vannethengil athil existing user detailsum token m ndaavm so athine session storageil store cheyyanu
+
+      if (result.status == 200) {
+
+        toast.success('Login Successfull')
+        // here ,existingUser keyilekk ee value ne vekkanu
+        sessionStorage.setItem("existingUser", JSON.stringify(result.data.existingUser))
+        // token already string so dont need to apply stringify
+        sessionStorage.setItem("token", result.data.token)
+        // userdetails ne empty akkanu
+        setUserDetails({
+          username: "",
+          email: "",
+          password: ""
+        })
+        // after login success home pageilekk move akanam , but here toast kandathinu shesham mathram move ayaal mathi
+        setTimeout( () =>{
+          navigate('/')
+        }, 2005)
+
+      }
+
+      // result not success
+      else if(result.status == 403 || result.status == 406){
+        toast.warning(result.response.data)
+        setUserDetails( {
+          username: "",
+          email: "",
+          password: ""
+        })
+      }
+
+      else{
+        toast.error('Something went wrong')
+        setUserDetails( {
+          username: "",
+          email: "",
+          password: ""
+        })
+      }
+
     }
 
   }
