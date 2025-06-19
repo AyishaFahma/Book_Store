@@ -33,13 +33,13 @@ function Header() {
 
           <div className='md:flex hidden'>
 
-            {/* <Link to={'/login'}>
+            <Link to={'/login'}>
               <button className='px-4 py-3 ms-5 border border-black rounded cursor-pointer'><FontAwesomeIcon icon={faUser} className='me-2' />Login
               </button>
-            </Link> */}
+            </Link>
 
             {/* dropdown button */}
-            <div className="relative inline-block text-left">
+            {/* <div className="relative inline-block text-left">
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
@@ -61,7 +61,7 @@ function Header() {
                 </div>
               </div>
               }
-            </div>
+            </div> */}
 
             {/* end of dropdown button */}
 
@@ -78,13 +78,13 @@ function Header() {
 
           <span onClick={() => setClickStatus(!clickStatus)} className='text-white text-2xl'><FontAwesomeIcon icon={faBars} /></span>
 
-          {/* <Link to={'/login'}>
+          <Link to={'/login'}>
             <button className='px-4 py-3 ms-5 border border-white rounded text-white cursor-pointer'><FontAwesomeIcon icon={faUser} className='me-2' />Login
             </button>
-          </Link> */}
+          </Link>
 
           {/* dropdown button */}
-            <div className="relative inline-block text-left">
+            {/* <div className="relative inline-block text-left">
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md  px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
@@ -106,7 +106,7 @@ function Header() {
                 </div>
               </div>
               }
-            </div>
+            </div> */}
 
             {/* end of dropdown button */}
 
