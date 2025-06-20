@@ -4,6 +4,8 @@ import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faLanguage, faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
+import { toast, ToastContainer } from 'react-toastify'
+import { addBookApi } from '../../sevices/allApi'
 
 function Profile() {
 
@@ -14,28 +16,35 @@ function Profile() {
   const [purchaseStatus, setPurchaseStatus] = useState(false)
 
   // state is created to store book details in sellbook 
-  const [bookDetails, setbookDetails] = useState( {
+  const [bookDetails, setbookDetails] = useState({
 
-    title : "" ,
-    author : "" ,
-    publisher : "" ,
-    language : "" ,
-    noofpages : "" ,
-    isbn : "" ,
-    imageUrl : "" ,
-    category : "" ,
-    price : "" ,
-    dprice : "" ,
-    abstract : "" ,
-    uploadImages : []
+    title: "",
+    author: "",
+    publisher: "",
+    language: "",
+    noofpages: "",
+    isbn: "",
+    imageUrl: "",
+    category: "",
+    price: "",
+    dprice: "",
+    abstract: "",
+    uploadImages: []
 
   })
 
-  // console.log(bookDetails);
+  // state to store url
+  const [preview, setpreview] = useState("")
+
+  // preview contain only recent uploaded image url
+  // so here all upload images are kept in a state array
+  const [allUploadedImage, setallUploadedImage] = useState([])
+
+  //console.log(bookDetails);
 
 
   // image button click to add images from system
-  const handleUpload = (e) =>{
+  const handleUpload = (e) => {
     // here, input boxine kittam e.target kodtha mathi input type text ayathukond ath e.target.value- data kittm . but here file so .files kodkkanam
     console.log(e.target.files);
 
@@ -45,16 +54,93 @@ function Profile() {
     const fileArray = bookDetails.uploadImages
     fileArray.push(e.target.files[0])
 
-    setbookDetails( {...bookDetails , uploadImages:fileArray})
+    setbookDetails({ ...bookDetails, uploadImages: fileArray })
 
     // createObjectURL() - to convert a file into url. coz we wnat to display the book image and the book images are in src so in src it only take url form
 
+    const url = URL.createObjectURL(e.target.files[0])
+    //console.log(url);
+    setpreview(url);
+    // all uploadedimages state ilekk data ne add cheyya
+    let images = allUploadedImage
+    images.push(url)
+    setallUploadedImage(images)
+    console.log(preview);
+    console.log(allUploadedImage);
 
-
-    
 
   }
-  
+
+  // reset button
+  const handleReset = () => {
+    setbookDetails({
+      title: "",
+      author: "",
+      publisher: "",
+      language: "",
+      noofpages: "",
+      isbn: "",
+      imageUrl: "",
+      category: "",
+      price: "",
+      dprice: "",
+      abstract: "",
+      uploadImages: []
+    })
+    setpreview("")
+    setallUploadedImage("")
+  }
+
+  //submit button
+  const handleSubmit = async()=>{
+    const {title,author,publisher,language, noofpages, isbn, imageUrl, category, price, dprice, abstract, uploadImages } = bookDetails
+    
+    console.log(title,author,publisher,language, noofpages, isbn, imageUrl, category, price, dprice, abstract, uploadImages);
+
+    if(!title || !author || !publisher || !language || !noofpages || !isbn || !imageUrl || !category || !price || !dprice || !abstract || !uploadImages.length == 0 ){
+      toast.info("Please fill the form completely")
+    }
+
+    else{
+      
+      // api calling
+      // if there is uploaded content(image upload cheyyunnundu ath systethil ulla content aanu so..) the data should be send as form data
+
+      //inorder to send as form data steps are there
+      // 1) create an object for the formdata class
+
+      const reqbody = new FormData()
+      // reqbody.append("title" , title) = ("key" , value)
+      // here we use loop for reduce code. bookdetails is an object so in operator directly gives you the key
+
+     
+      for(let key in bookDetails){
+
+        if( key != 'uploadImages'){
+          reqbody.append(key , bookDetails[key])
+        }
+
+        else{
+          //uploadImages is an array so each value is need to append so use map to iterate each item
+
+          bookDetails.uploadImages.map( (item) => {
+            reqbody.append("uploadImages" , item)
+          })
+        }
+
+      }
+
+      const result = await addBookApi(reqbody)
+      console.log(reqbody);
+      
+
+    }
+    
+
+    
+    
+  }
+
 
 
   return (
@@ -109,31 +195,31 @@ function Profile() {
               <div className='my-10'>
 
                 <div className="mb-3">
-                  <input value={bookDetails.title} onChange={(e) => setbookDetails({...bookDetails , title:e.target.value})} type="text" placeholder='Title' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.title} onChange={(e) => setbookDetails({ ...bookDetails, title: e.target.value })} type="text" placeholder='Title' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.author} onChange={(e) => setbookDetails({...bookDetails , author:e.target.value})} type="text" placeholder='Author' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.author} onChange={(e) => setbookDetails({ ...bookDetails, author: e.target.value })} type="text" placeholder='Author' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.noofpages} onChange={(e) => setbookDetails({...bookDetails , noofpages:e.target.value})} type="text" placeholder='No of Pages' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.noofpages} onChange={(e) => setbookDetails({ ...bookDetails, noofpages: e.target.value })} type="text" placeholder='No of Pages' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.imageUrl} onChange={(e) => setbookDetails({...bookDetails , imageUrl:e.target.value})} type="text" placeholder='Image Url' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.imageUrl} onChange={(e) => setbookDetails({ ...bookDetails, imageUrl: e.target.value })} type="text" placeholder='Image Url' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.price} onChange={(e) => setbookDetails({...bookDetails , price:e.target.value})} type="text" placeholder='Price' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.price} onChange={(e) => setbookDetails({ ...bookDetails, price: e.target.value })} type="text" placeholder='Price' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.dprice} onChange={(e) => setbookDetails({...bookDetails , dprice:e.target.value})} type="text" placeholder='Discount Price' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.dprice} onChange={(e) => setbookDetails({ ...bookDetails, dprice: e.target.value })} type="text" placeholder='Discount Price' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <textarea value={bookDetails.abstract} onChange={(e) => setbookDetails({...bookDetails , abstract:e.target.value})} placeholder='Abstract' rows={'8'} className='p-2 bg-white rounded w-full outline-0'></textarea>
+                  <textarea value={bookDetails.abstract} onChange={(e) => setbookDetails({ ...bookDetails, abstract: e.target.value })} placeholder='Abstract' rows={'8'} className='p-2 bg-white rounded w-full outline-0'></textarea>
                 </div>
 
               </div>
@@ -142,52 +228,60 @@ function Profile() {
               <div className='my-10 px-2'>
 
                 <div className="mb-3">
-                  <input value={bookDetails.publisher} onChange={(e) => setbookDetails({...bookDetails , publisher:e.target.value})} type="text" placeholder='Publisher' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.publisher} onChange={(e) => setbookDetails({ ...bookDetails, publisher: e.target.value })} type="text" placeholder='Publisher' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.language} onChange={(e) => setbookDetails({...bookDetails , language:e.target.value})} type="text" placeholder='Language' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.language} onChange={(e) => setbookDetails({ ...bookDetails, language: e.target.value })} type="text" placeholder='Language' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.isbn} onChange={(e) => setbookDetails({...bookDetails , isbn:e.target.value})} type="text" placeholder='ISBN' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.isbn} onChange={(e) => setbookDetails({ ...bookDetails, isbn: e.target.value })} type="text" placeholder='ISBN' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
                 <div className="mb-3">
-                  <input value={bookDetails.category} onChange={(e) => setbookDetails({...bookDetails , category:e.target.value})} type="text" placeholder='Category' className='p-2 bg-white rounded w-full outline-0' />
+                  <input value={bookDetails.category} onChange={(e) => setbookDetails({ ...bookDetails, category: e.target.value })} type="text" placeholder='Category' className='p-2 bg-white rounded w-full outline-0' />
                 </div>
 
 
 
 
                 <div className='flex justify-center items-center mt-10 flex-col'>
-
-                  <label htmlFor="uploadBookImg">
-                    <input type="file" id='uploadBookImg' style={{ display: 'none' }} onChange={(e) =>handleUpload(e)} />
+                  {/* conditional rendering based on preview data if no data then upload img or selected image by user */}
+                  {!preview ? <label htmlFor="uploadBookImg">
+                    <input type="file" id='uploadBookImg' style={{ display: 'none' }} onChange={(e) => handleUpload(e)} />
                     <img src="https://cdn.pixabay.com/photo/2016/01/03/00/43/upload-1118929_1280.png" alt="no image" style={{ width: '200px', height: '200px' }} />
                   </label>
+                    :
+                    <img src={preview} alt="no image" style={{ width: '200px', height: '200px' }} />
+                  }
+
+
 
                   {/* uploaded book images max 3 */}
 
-                  <div className='mt-10 flex items-center'>
-                    <img src="https://cdn.shopify.com/s/files/1/0070/1884/0133/t/8/assets/pf-db636e27--Books23_1200x.jpg?v=1620061505" alt="no image" style={{ width: '50px', height: '50px' }} className='mx-2' />
+                  {preview && <div className='mt-10 flex items-center'>
 
-                    <img src="https://cdn.shopify.com/s/files/1/0070/1884/0133/t/8/assets/pf-db636e27--Books23_1200x.jpg?v=1620061505" alt="no image" style={{ width: '50px', height: '50px' }} className='mx-2' />
-
-                    <img src="https://cdn.shopify.com/s/files/1/0070/1884/0133/t/8/assets/pf-db636e27--Books23_1200x.jpg?v=1620061505" alt="no image" style={{ width: '50px', height: '50px' }} className='mx-2' />
-
-
-                    <label htmlFor="uploadBookImg">
-                      <input type="file" id='uploadBookImg' style={{ display: 'none' }} />
-
-                      <FontAwesomeIcon icon={faPlus} className='p-2 shadow-lg/30 bg-gray-300 border border-gray-300 ms-4 cursor-pointer'/>
-                      
-                    </label>
-
-                    
+                    {
+                      allUploadedImage.map((item) => (
+                        <img src={item} alt="no image" style={{ width: '50px', height: '50px' }} className='mx-2' />
+                      ))
+                    }
 
 
-                  </div>
+
+
+                    {allUploadedImage.length < 3 && <label htmlFor="uploadBookImg">
+                      <input type="file" id='uploadBookImg' style={{ display: 'none' }} onChange={(e) => handleUpload(e)} />
+
+                      <FontAwesomeIcon icon={faPlus} className='p-2 shadow-lg/30 bg-gray-300 border border-gray-300 ms-4 cursor-pointer' />
+
+                    </label>}
+
+
+                  </div>}
+
+
                 </div>
 
 
@@ -197,8 +291,8 @@ function Profile() {
             </div>
 
             <div className="flex justify-end ">
-              <button className='bg-amber-700 text-white px-5 py-3 rounded hover:border hover:border-amber-700 hover:text-amber-700 hover:bg-white'>Reset</button>
-              <button className='bg-green-700 text-white px-5 py-3 rounded hover:border hover:border-green-700 hover:text-green-700 hover:bg-white ms-4'>Submit</button>
+              <button type='button' onClick={handleReset} className='bg-amber-700 text-white px-5 py-3 rounded hover:border hover:border-amber-700 hover:text-amber-700 hover:bg-white'>Reset</button>
+              <button  type='button' onClick={handleSubmit} className='bg-green-700 text-white px-5 py-3 rounded hover:border hover:border-green-700 hover:text-green-700 hover:bg-white ms-4'>Submit</button>
             </div>
 
           </div>
@@ -241,10 +335,10 @@ function Profile() {
           {/* next book details here */}
 
 
-          
+
           {/* if no book added */}
           <div className='flex justify-center items-center flex-col'>
-            <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{width:'200px', height:'200px'}} />
+            <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{ width: '200px', height: '200px' }} />
             <p className='text-red-500 mt-5'>No Book Brought...</p>
           </div>
 
@@ -292,7 +386,7 @@ function Profile() {
           {/* if no book added */}
 
           <div className='flex justify-center items-center flex-col'>
-            <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{width:'200px', height:'200px'}} />
+            <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{ width: '200px', height: '200px' }} />
             <p className='text-red-500 mt-5'>No Book Brought...</p>
           </div>
 
@@ -311,7 +405,7 @@ function Profile() {
 
 
 
-
+     < ToastContainer position='top-center' theme='colored' autoClose={2000}/>
 
       <Footer />
 

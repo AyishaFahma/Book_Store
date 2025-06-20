@@ -2,13 +2,14 @@ import axios from "axios"
 
 
 
-export const commonApi = async (httpRequest , url , reqBody) => {
+export const commonApi = async (httpRequest , url , reqBody , reqHeader ) => {
 
 
     const reqConfig = {
         method : httpRequest ,
         url ,
-        data : reqBody
+        data : reqBody ,
+        headers : reqHeader
     }
 
 
