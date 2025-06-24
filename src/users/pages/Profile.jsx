@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -39,6 +39,10 @@ function Profile() {
   // preview contain only recent uploaded image url
   // so here all upload images are kept in a state array
   const [allUploadedImage, setallUploadedImage] = useState([])
+
+
+  // to store token that is get from sessionstorage
+  const [token, settoken] = useState("")
 
   //console.log(bookDetails);
 
@@ -130,16 +134,25 @@ function Profile() {
 
       }
 
-      const result = await addBookApi(reqbody)
-      console.log(reqbody);
+
+      //create reqheader
+      const reqHeader = {
+        "Authorization" :`Bearer ${token}`
+      }
+
+      const result = await addBookApi(reqbody , reqHeader)
+      console.log(result);
       
 
-    }
-    
-
-    
-    
+    } 
   }
+
+  //to get token from session storage when page load
+  useEffect( () =>{
+    if(sessionStorage.getItem("token")){
+      settoken(sessionStorage.getItem("token"))
+    }
+  },[])
 
 
 
