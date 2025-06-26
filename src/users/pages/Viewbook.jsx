@@ -1,14 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCamera, faEye, faXmark } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { viewBookApi } from '../../sevices/allApi'
 
 function Viewbook() {
 
   //modal clicking state
   const [modalStatus, setModalStatus] = useState(false)
+
+  const [viewBook, setviewbook] = useState([])
+
+  const {id} = useParams()
+  console.log(id);
+
+
+  const getViewBookDetails = async(id) => {
+    const result = await viewBookApi(id)
+    setviewbook(result.data)
+
+  }
+  console.log(viewBook);
+
+  useEffect( ()=>{
+    getViewBookDetails(id)
+  },[])
+  
+  
 
 
   return (

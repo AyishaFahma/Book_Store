@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faLanguage, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck,  faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
 import { toast, ToastContainer } from 'react-toastify'
 import { addBookApi } from '../../sevices/allApi'
@@ -101,7 +101,7 @@ function Profile() {
     
     console.log(title,author,publisher,language, noofpages, isbn, imageUrl, category, price, dprice, abstract, uploadImages);
 
-    if(!title || !author || !publisher || !language || !noofpages || !isbn || !imageUrl || !category || !price || !dprice || !abstract || !uploadImages.length == 0 ){
+    if(!title || !author || !publisher || !language || !noofpages || !isbn || !imageUrl || !category || !price || !dprice || !abstract, uploadImages.length == 0 ){
       toast.info("Please fill the form completely")
     }
 
@@ -129,6 +129,7 @@ function Profile() {
 
           bookDetails.uploadImages.map( (item) => {
             reqbody.append("uploadImages" , item)
+            // this reqbody is attached in api calling part
           })
         }
 
@@ -137,19 +138,36 @@ function Profile() {
 
       //create reqheader
       const reqHeader = {
+        //authorization keyilanu token vekkendath
+        // bearer key is provided before token - is the authorization schema basically used in jwt token verification
+        //vere oru authorization certificte or secret data is not needed to provide inorder to verify the token 
         "Authorization" :`Bearer ${token}`
       }
-
+      
+      // token is need to be passed in reqheader
       const result = await addBookApi(reqbody , reqHeader)
       console.log(result);
-      
+
+      if(result.status == 200){
+
+        toast.success('Book added successfully')
+      }
+      else if(result.status == 401){
+        toast.warning(result.response.data)
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+      handleReset()
+
 
     } 
   }
 
-  //to get token from session storage when page load
+  //to get token from session storage to provide in reqHeader when page load
   useEffect( () =>{
     if(sessionStorage.getItem("token")){
+      // if token present place token in the state
       settoken(sessionStorage.getItem("token"))
     }
   },[])
@@ -304,8 +322,8 @@ function Profile() {
             </div>
 
             <div className="flex justify-end ">
-              <button type='button' onClick={handleReset} className='bg-amber-700 text-white px-5 py-3 rounded hover:border hover:border-amber-700 hover:text-amber-700 hover:bg-white'>Reset</button>
-              <button  type='button' onClick={handleSubmit} className='bg-green-700 text-white px-5 py-3 rounded hover:border hover:border-green-700 hover:text-green-700 hover:bg-white ms-4'>Submit</button>
+              <button type='button' onClick={handleReset} className='bg-amber-700 text-white px-5 py-3 rounded hover:border hover:border-amber-700 hover:text-amber-700 hover:bg-white cursor-pointer'>Reset</button>
+              <button  type='button' onClick={handleSubmit} className='bg-green-700 text-white px-5 py-3 rounded hover:border hover:border-green-700 hover:text-green-700 hover:bg-white ms-4 cursor-pointer'>Submit</button>
             </div>
 
           </div>

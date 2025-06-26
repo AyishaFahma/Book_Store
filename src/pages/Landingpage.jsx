@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../users/components/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
+import { homeBookApi } from '../sevices/allApi'
 
 function Landingpage() {
+
+  // store the all 4 book in state
+  const [allHomeBook, setAllHomeBook] = useState([])
+
+
+  const getAllHomeBook = async()=>{
+    const result = await homeBookApi()
+    //console.log(result);
+    setAllHomeBook(result.data)
+  }
+  console.log(allHomeBook);
+  
+
+
+  // when page loads it shows newly added 4 book, so call api
+  useEffect( ()=>{
+
+    getAllHomeBook()
+
+  },[])
+
+
   return (
     <>
 
@@ -32,48 +55,19 @@ function Landingpage() {
         <h1 className='text-center text-2xl font-bold mb-5'>NEW ARRIVALS</h1>
         <p className='text-center text-xl mb-5'>Explore Our Latest Collection</p>
 
-        <div className='md:grid grid-cols-4 gap-x-10 p-10 md:px-20'>
+        {allHomeBook?.length > 0 ? <div className='md:grid grid-cols-4 gap-x-10 p-10 md:px-20'>
 
-          <div className='p-5 flex justify-center items-center flex-col md:mb-0 mb-10 shadow-lg/30'>
-            <img src="https://danbrown.com/wp-content/uploads/2024/10/Dan-Brown_DVCYA_book-cover.jpg" alt="book image" style={{ width: '100%', height: '300px' }} />
+          {allHomeBook?.map( (item) => (<div className='p-5 flex justify-center items-center flex-col md:mb-0 mb-10 shadow-lg/30'>
+            <img src={item?.imageUrl} alt="book image" style={{ width: '100%', height: '300px' }} />
 
-            <h1 className='text-blue-600 mt-5'>Dan Brown</h1>
-            <p>The Da Vinci Code</p>
-            <p>$ 18</p>
-          </div>
-
-          <div className=' p-5 flex justify-center items-center flex-col md:mb-0 mb-10 shadow-lg/30'>
-            <img src="https://danbrown.com/wp-content/uploads/2024/10/Dan-Brown_DVCYA_book-cover.jpg" alt="book image" style={{ width: '100%', height: '300px' }} />
-
-            <h1 className='text-blue-600 mt-5'>Dan Brown</h1>
-            <p>The Da Vinci Code</p>
-            <p>$ 18</p>
-          </div>
-
-          <div className='p-5 flex justify-center items-center flex-col md:mb-0 mb-10 shadow-lg/30'>
-            <img src="https://danbrown.com/wp-content/uploads/2024/10/Dan-Brown_DVCYA_book-cover.jpg" alt="book image" style={{ width: '100%', height: '300px' }} />
-
-            <h1 className='text-blue-600 mt-5'>Dan Brown</h1>
-            <p>The Da Vinci Code</p>
-            <p>$ 18</p>
-          </div>
-
-          <div className=' p-5 flex justify-center items-center flex-col md:mb-0 mb-10 shadow-lg/30'>
-            <img src="https://danbrown.com/wp-content/uploads/2024/10/Dan-Brown_DVCYA_book-cover.jpg" alt="book image" style={{ width: '100%', height: '300px' }} />
-
-            <h1 className='text-blue-600 mt-5'>Dan Brown</h1>
-            <p>The Da Vinci Code</p>
-            <p>$ 18</p>
-          </div>
-
-
-          
-
-
+            <h1 className='text-blue-600 mt-5'>{item?.author}</h1>
+            <p>{item?.title}</p>
+            <p>$ {item?.dprice}</p>
+          </div>)) }
 
         </div>
-
-        <p className='text-center'>Loading....</p>
+                 :
+        <p className='text-center'>Loading....</p>}
 
         <div className='flex justify-center items-center md:my-10'>
           <Link to={'/all-books'}><button className='bg-blue-950 text-white py-3 px-5 hover:bg-white hover:border hover:border-blue-950 hover:text-blue-950 cursor-pointer'>Explore More</button></Link>
