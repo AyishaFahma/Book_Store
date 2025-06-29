@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck,  faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
 import { toast, ToastContainer } from 'react-toastify'
-import { addBookApi } from '../../sevices/allApi'
+import { addBookApi, allUserAddedBookApi } from '../../sevices/allApi'
 
 function Profile() {
 
@@ -164,9 +164,28 @@ function Profile() {
     } 
   }
 
+
+
+  // api calling to get all added book by a user
+  const getAllUserAddedBooks = async (token) => {
+    console.log('getAllUserAddedBooks');
+
+
+    const result = await allUserAddedBookApi(reqHeader)
+    console.log(result);
+    
+    
+  }
+
+
+
+
+
+
   //to get token from session storage to provide in reqHeader when page load
   useEffect( () =>{
     if(sessionStorage.getItem("token")){
+      const tok = sessionStorage.getItem("token")
       // if token present place token in the state
       settoken(sessionStorage.getItem("token"))
     }

@@ -10,8 +10,14 @@ function Allbooks() {
   const [token, settoken] = useState("")
   const [allBooks, setallBooks] = useState([])
 
+  // to search a book
+  const [searchKey, setsearchKey] = useState("")
 
-  const getAllBooks = async (token) => {
+  // to store initial state of book
+   const [tempArray, setTempArray] = useState([])
+
+
+  const getAllBooks = async (token , searchKey) => {
 
     const reqHeader = {
       "Authorization": `Bearer ${token}`
@@ -19,12 +25,27 @@ function Allbooks() {
 
 
 
-    const result = await allBooksUserApi(reqHeader)
+    const result = await allBooksUserApi(reqHeader , searchKey)
     setallBooks(result.data)
 
     //console.log(result);
   }
-  console.log(allBooks);
+  //console.log(allBooks);
+  console.log(searchKey);
+  
+
+  // filter applying function
+  
+  const filter = (data)=> {
+
+    if(data == 'No filter'){
+      setallBooks(tempArray)
+    }
+    else{
+      setallBooks(tempArray.filter( (item) => item.category.toLowerCase() == data.toLowerCase()))
+    }
+
+  }
 
 
 
@@ -35,10 +56,10 @@ function Allbooks() {
     if (sessionStorage.getItem("token")) {
       const tok = sessionStorage.getItem("token")
       settoken(tok)
-      getAllBooks(tok)
+      getAllBooks(tok , searchKey)
     }
 
-  }, [])
+  }, [ searchKey])
 
 
   return (
@@ -52,9 +73,9 @@ function Allbooks() {
         <div className="md:grid grid-cols-3 mb-10">
           <div></div>
           <div className='flex md:px-0 px-2'>
-            <input type="text" placeholder='Search By Book Title' className='bg-white p-2 border border-gray-300 w-full' />
+            <input onChange={(e)=>setsearchKey(e.target.value)} type="text" placeholder='Search By Book Title' className='bg-white p-2 border border-gray-300 w-full' />
 
-            <button className='bg-blue-900 px-4 py-3 text-white hover:bg-blue-950'>Search</button>
+            <button  className='bg-blue-900 px-4 py-3 text-white hover:bg-blue-950'>Search</button>
           </div>
           <div></div>
         </div>
@@ -68,44 +89,49 @@ function Allbooks() {
 
             <h1 className='font-medium text-2xl my-4'>Filter</h1>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Literary Fiction')}>
               <input type="radio" id='Literary Fiction' name='filter' />
               <label htmlFor="Literary Fiction" className='ms-3'>Literary Fiction</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Philosophy')}>
               <input type="radio" id='Philosophy' name='filter' />
               <label htmlFor="Philosophy" className='ms-3'>Philosophy</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Romance')}>
               <input type="radio" id='Romance' name='filter' />
               <label htmlFor="Romance" className='ms-3'>Romance</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Mystery/Thriller')}>
               <input type="radio" id='Mystery/Thriller' name='filter' />
               <label htmlFor="Mystery/Thriller" className='ms-3'>Mystery/Thriller</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Horror')}>
               <input type="radio" id='Horror' name='filter' />
               <label htmlFor="Horror" className='ms-3'>Horror</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Auto/Biography')}>
               <input type="radio" id='Auto/Biography' name='filter' />
               <label htmlFor="Auto/Biography" className='ms-3'>Auto/Biography</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Self-Help')}>
               <input type="radio" id='Self-Help' name='filter' />
               <label htmlFor="Self-Help" className='ms-3'>Self-Help</label>
             </div>
 
-            <div className='my-2 flex'>
+            <div className='my-2 flex' onClick={()=>filter('Politics')}>
               <input type="radio" id='Politics' name='filter' />
               <label htmlFor="Politics" className='ms-3'>Politics</label>
+            </div>
+
+            <div className='my-2 flex' onClick={()=>filter('No filter')}>
+              <input type="radio" id='No filter' name='filter' />
+              <label htmlFor="No filter" className='ms-3'>No filter</label>
             </div>
 
 
@@ -124,7 +150,7 @@ function Allbooks() {
 
               <h1 className='text-blue-600 mt-5'>{item?.author}</h1>
               <p>{item?.title.slice(0,20)}...</p>
-              <Link to={`/view-book/${item?.id}`} className='w-full'><button className='bg-blue-900 w-full p-2 text-white mt-3 hover:bg-blue-950'>View Book</button></Link>
+              <Link to={`/view-book/${item?._id}`} className='w-full'><button className='bg-blue-900 w-full p-2 text-white mt-3 hover:bg-blue-950'>View Book</button></Link>
             </div>
             ))
 

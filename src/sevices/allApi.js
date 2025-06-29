@@ -34,12 +34,33 @@ export const addBookApi = async( reqBody , reqHeader ) =>{
 
 
 
-// api to get all books - user
-export const allBooksUserApi = async(reqHeader) => {
-    return await commonApi('GET' , `${serverurl}/all-books-user` , "" , reqHeader)
+// api to get all books - user Books page
+// here searchKey is a query parameter
+// query parameter syntax => baseurl?key=value
+
+export const allBooksUserApi = async(reqHeader , searchKey) => {
+    return await commonApi('GET' , `${serverurl}/all-books-user?search=${searchKey}` , "" , reqHeader)
 }
 
-//api to view a book
+
+
+
+//api to view a perticular book so we need id for 
 export const viewBookApi = async(id) => {
     return await commonApi('GET' , `${serverurl}/view-book/${id}`)
+}
+
+
+
+// api to get all user added book
+export const allUserAddedBookApi = async(reqHeader) =>{
+    return await commonApi('GET' , `${serverurl}/all-user-added-books` , "" , reqHeader)
+}
+
+
+
+// api to get all user brought book
+
+export const allUserbroughtBookApi = async(reqHeader) => {
+    return await commonApi('GET' , `${serverurl}/all-user-brought-books` , "" , reqHeader)
 }

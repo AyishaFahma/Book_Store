@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCamera, faEye, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link, useParams } from 'react-router-dom'
 import { viewBookApi } from '../../sevices/allApi'
+import { serverurl } from '../../sevices/serverurl'
 
 function Viewbook() {
 
@@ -13,6 +14,9 @@ function Viewbook() {
 
   const [viewBook, setviewbook] = useState([])
 
+
+  // when viewbook button click , we get id in the path (browser) , here useparams hook is used to get the id of book
+  // pathile parameter access cheyyan useparams use akkam
   const {id} = useParams()
   console.log(id);
 
@@ -41,7 +45,7 @@ function Viewbook() {
         {/* image of book */}
 
         <div className='mb-10 md:mb-0'>
-          <img src="https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg" alt="no book image" className='w-full' style={{ height: '500px' }} />
+          <img src={viewBook?.imageUrl} alt="no book image" className='w-full' style={{ height: '500px' }} />
         </div>
 
         {/* book details main sec */}
@@ -76,11 +80,13 @@ function Viewbook() {
                       <h1 className='text-blue-500'><FontAwesomeIcon icon={faCamera} className='me-3'/> Camera click of the book in the hand of seller</h1>
 
                       <div className='md:flex p-5'>
-                        <img src="https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg" alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
+                        {/* uploaded images */}
+
+                        { viewBook?.uploadImages?.map( (item)=> (
+                          <img src={ `${serverurl}/imgUpload/${item.filename}`} alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
+                        )) }
   
-                        <img src="https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg" alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
-  
-                        <img src="https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg" alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
+                        
                       </div>
 
                     </div>
@@ -96,24 +102,24 @@ function Viewbook() {
 
 
 
-          <h1 className='text-center md:text-2xl text-lg font-bold'>Ikigai: The Japanese Secret to a Long and Happy Life</h1>
-          <p className='text-center mt-3 text-blue-700'>-Héctor García, Francesc Miralles-</p>
+          <h1 className='text-center md:text-2xl text-lg font-bold'>{viewBook?.title}</h1>
+          <p className='text-center mt-3 text-blue-700'>-{viewBook?.author}-</p>
 
           {/* grid for inner details of book */}
           <div className="md:grid grid-cols-3 my-15 gap-x-20 ">
 
             <div >
-              <p className='font-[600] mb-4 '>Publisher : Penguin Life</p>
-              <p className='font-[600] mb-4'>Seller Mail : maxwell@gmail.com</p>
+              <p className='font-[600] mb-4 '>Publisher : {viewBook?.publisher}</p>
+              <p className='font-[600] mb-4'>Seller Mail : {viewBook?.userMail}</p>
 
             </div>
             <div className='font-[600] '>
-              <p className='mb-4'>Language : English</p>
-              <p className='mb-4'>Real Price : $ 15</p>
+              <p className='mb-4'>Language : {viewBook?.language}</p>
+              <p className='mb-4'>Real Price : $ {viewBook?.price}</p>
             </div>
             <div className='font-[600]'>
-              <p className='mb-4'>No. of pages : 208</p>
-              <p className='mb-4'>ISBN: 978-0143130727</p>
+              <p className='mb-4'>No. of pages : {viewBook?.noofpages} </p>
+              <p className='mb-4'>ISBN: {viewBook?.isbn} </p>
             </div>
 
           </div>
@@ -123,7 +129,7 @@ function Viewbook() {
 
 
           {/* last paragraph */}
-          <p className='font-[600] text-justify'>Ikigai is a Japanese concept that combines the words "iki"(life) and "gai"(worth).The book explores the principles of Ikigai,or the reason for being, and how it leads to a long,fulfilling,and happy life.It presents the stories of the people from Okinawa,the place with the highest life expectancy,to understand their ways of living and what keeps them happy.authors blend the ancient wisdom of the Japanese with modern psychological principles to offer insights on how to live a more meaningful and purpose-driven life.</p>
+          <p className='font-[600] text-justify'>{viewBook?.abstract}</p>
 
           <div className="md:grid grid-cols-3 ">
             <div></div>
@@ -131,7 +137,7 @@ function Viewbook() {
             <div className='mt-20 justify-between flex gap-x-5'>
               <Link to={'/all-books'}><button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center '><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button></Link>
 
-              <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>13</span></button>
+              <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>{viewBook?.dprice}</span></button>
             </div>
           </div>
 
