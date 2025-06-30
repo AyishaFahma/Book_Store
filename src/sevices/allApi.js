@@ -36,7 +36,7 @@ export const addBookApi = async( reqBody , reqHeader ) =>{
 
 // api to get all books - user Books page
 // here searchKey is a query parameter
-// query parameter syntax => baseurl?key=value
+// query parameter syntax => baseurl?key=searchvalue
 
 export const allBooksUserApi = async(reqHeader , searchKey) => {
     return await commonApi('GET' , `${serverurl}/all-books-user?search=${searchKey}` , "" , reqHeader)
@@ -64,3 +64,10 @@ export const allUserAddedBookApi = async(reqHeader) =>{
 export const allUserbroughtBookApi = async(reqHeader) => {
     return await commonApi('GET' , `${serverurl}/all-user-brought-books` , "" , reqHeader)
 }
+
+
+// api to delete a book by the user
+export const removeBookApi = async(id) => {
+    return await commonApi('DELETE' , `${serverurl}/delete-book/${id}`)
+}
+

@@ -96,11 +96,21 @@ function Auth({ register }) {
           email: "",
           password: ""
         })
-        // after login success home pageilekk move akanam , but here toast kandathinu shesham mathram move ayaal mathi
+
+        // login admin or user aneel navigate cheyyunnath change cheyyanu
+
+        if(result.data.existingUser.email == 'admin@gmail.com') {
+          setTimeout( () =>{
+          navigate('/admin-home')
+        }, 2005)
+        }
+        else {
+          // after login success home pageilekk move akanam , but here toast kandathinu shesham mathram move ayaal mathi
         setTimeout( () =>{
           navigate('/')
         }, 2005)
 
+        }
       }
 
       // result not success
@@ -186,12 +196,6 @@ function Auth({ register }) {
                   <p>Are you a New User? <Link to={'/register'} className='text-blue-400 underline'>Register</Link></p>}
 
               </div>
-
-
-
-
-
-
 
             </form>
           </div>

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck,  faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
 import { toast, ToastContainer } from 'react-toastify'
-import { addBookApi, allUserAddedBookApi } from '../../sevices/allApi'
+import { addBookApi, allUserAddedBookApi, allUserbroughtBookApi, removeBookApi } from '../../sevices/allApi'
 
 function Profile() {
 
@@ -43,6 +43,14 @@ function Profile() {
 
   // to store token that is get from sessionstorage
   const [token, settoken] = useState("")
+
+  const [UserAddedBook, setUserAddedBook] = useState([])
+
+  const [UserBroughtBook, setUserBroughtBook] = useState([])
+
+  // state to delete a book
+  const [deleteStatus, setdeleteStatus] = useState([])
+
 
   //console.log(bookDetails);
 
@@ -170,15 +178,46 @@ function Profile() {
   const getAllUserAddedBooks = async (token) => {
     console.log('getAllUserAddedBooks');
 
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+
 
     const result = await allUserAddedBookApi(reqHeader)
-    console.log(result);
-    
-    
+    setUserAddedBook(result.data)
+    console.log(UserAddedBook); 
   }
 
 
 
+  // api calling to get all brought book
+  const getAllUserbroughtBooks = async(token) => {
+
+    console.log('getAllUserbroughtBooks');
+    
+
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+
+
+    const result = await allUserbroughtBookApi(reqHeader)
+
+    setUserBroughtBook(result.data)
+    console.log(UserBroughtBook);
+     
+
+  }
+
+  //function to call api to delete book
+  const deleteBook = async(id) => {
+    const result = await removeBookApi(id)
+    console.log(result);
+    if(result.status == 200){
+      setdeleteStatus(result)
+    }
+    
+  }
 
 
 
@@ -187,9 +226,20 @@ function Profile() {
     if(sessionStorage.getItem("token")){
       const tok = sessionStorage.getItem("token")
       // if token present place token in the state
-      settoken(sessionStorage.getItem("token"))
+      settoken(tok)
+
+      if(bookStatus == true) {
+        getAllUserAddedBooks(tok)
+      }
+      else if(purchaseStatus == true) {
+        getAllUserbroughtBooks(tok)
+      }
+      else{
+        console.log('Something went wrong');
+        
+      }
     }
-  },[])
+  },[bookStatus , deleteStatus])
 
 
 
@@ -352,20 +402,22 @@ function Profile() {
 
         {bookStatus && <div className='shadow-lg/30 rounded py-8 md:px-5 px-2 my-5 border-gray-200 border'>
           {/* one book details/content */}
-          <div className='bg-gray-200 p-5 rounded mb-5'>
+          {UserAddedBook?.length > 0 ?
+            UserAddedBook.map( (item) => (
+              <div className='bg-gray-200 p-5 rounded mb-5'>
             {/* book details part */}
             <div className="md:grid grid-cols-[5fr_2fr] gap-x-5">
 
               <div >
-                <h1 className='text-2xl'>Harry Potter </h1>
-                <p className='text-lg mb-3'>Jk Rowling</p>
-                <p className='text-blue-600'>$ <span>20</span></p>
+                <h1 className='text-2xl'>{item?.title}</h1>
+                <p className='text-lg mb-3'>{item?.author}</p>
+                <p className='text-blue-600'>$ <span>{item?.dprice} </span></p>
 
-                <p className='mt-2 text-medium text-justify md:mb-0 mb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex laborum itaque illo porro libero veritatis quam nam, accusantium ullam maxime corporis perferendis vitae explicabo aut facere ea? Consequuntur, dolores debitis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus nulla, eius velit qui reprehenderit explicabo repellendus provident, earum totam rem quos non, omnis deserunt doloribus laborum aut autem nobis illo!</p>
+                <p className='mt-2 text-medium text-justify md:mb-0 mb-5'>{item?.abstract}</p>
               </div>
 
               <div>
-                <img src="https://wp.scoopwhoop.com/wp-content/uploads/2016/10/57ee5c3a7c9988201038142a_418243985.jpg" alt="no image" style={{ width: '300px', height: '300px' }} />
+                <img src={item?.imageUrl} alt="no image" style={{ width: '300px', height: '300px' }} />
               </div>
 
             </div>
@@ -373,24 +425,32 @@ function Profile() {
             <div className="flex justify-between items-center w-full ">
               {/* soldout image */}
               <div >
-                <img src="https://png.pngtree.com/png-clipart/20230423/ourmid/pngtree-sold-rubber-stamp-png-image_6718966.png" alt="" style={{ width: '100px', height: '100px' }} />
+
+                {item?.status == 'Pending' ? <img src="https://png.pngtree.com/png-vector/20230830/ourmid/pngtree-pending-imminent-rubber-stamp-image_9932560.png" alt="" style={{ width: '100px', height: '100px' }} /> : item?.status == 'approved' ?
+
+                <img src="https://pngimg.com/d/approved_PNG56.png" alt="" style={{ width: '100px', height: '100px' }} /> :
+
+                <img src="https://png.pngtree.com/png-clipart/20230423/ourmid/pngtree-sold-rubber-stamp-png-image_6718966.png" alt="" style={{ width: '100px', height: '100px' }} />}
+
               </div>
               {/* delete button */}
               <div >
-                <button className='px-4 py-2 text-white bg-red-600 rounded hover:bg-white hover:text-red-700 hover:border hover:border-red-700'>Delete</button>
+                <button type='button' onClick={() => deleteBook(item._id)}  className='px-4 py-2 text-white bg-red-600 rounded hover:bg-white hover:text-red-700 hover:border hover:border-red-700'>Delete</button>
               </div>
             </div>
           </div>
+            ))
+           
 
-          {/* next book details here */}
+          // {/* next book details here */}
 
+           :
 
-
-          {/* if no book added */}
+          // {/* if no book added */}
           <div className='flex justify-center items-center flex-col'>
             <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{ width: '200px', height: '200px' }} />
             <p className='text-red-500 mt-5'>No Book Brought...</p>
-          </div>
+          </div>}
 
 
 
@@ -402,20 +462,22 @@ function Profile() {
 
         {purchaseStatus && <div className='shadow-lg/30 border-gray-200 border rounded py-8 md:px-5 px-2 my-5'>
           {/* one book details/content */}
-          <div className='bg-gray-200 p-5 rounded mb-5'>
+          {UserBroughtBook?.length > 0 ? 
+          UserBroughtBook?.map( (item) => (
+            <div className='bg-gray-200 p-5 rounded mb-5'>
             {/* book details part */}
             <div className="md:grid grid-cols-[5fr_2fr] gap-x-5">
 
               <div >
-                <h1 className='text-2xl'>Harry Potter </h1>
-                <p className='text-lg mb-3'>Jk Rowling</p>
-                <p className='text-blue-600'>$ <span>20</span></p>
+                <h1 className='text-2xl'>{item?.title} </h1>
+                <p className='text-lg mb-3'>{item?.author}</p>
+                <p className='text-blue-600'>$ <span>{item?.dprice}</span></p>
 
-                <p className='mt-2 text-medium text-justify md:mb-0 mb-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex laborum itaque illo porro libero veritatis quam nam, accusantium ullam maxime corporis perferendis vitae explicabo aut facere ea? Consequuntur, dolores debitis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatibus nulla, eius velit qui reprehenderit explicabo repellendus provident, earum totam rem quos non, omnis deserunt doloribus laborum aut autem nobis illo!</p>
+                <p className='mt-2 text-medium text-justify md:mb-0 mb-5'>{item?.abstract}</p>
               </div>
 
               <div>
-                <img src="https://wp.scoopwhoop.com/wp-content/uploads/2016/10/57ee5c3a7c9988201038142a_418243985.jpg" alt="no image" style={{ width: '300px', height: '300px' }} />
+                <img src={item?.imageUrl} alt="no image" style={{ width: '300px', height: '300px' }} />
               </div>
 
             </div>
@@ -428,17 +490,19 @@ function Profile() {
             </div>
 
           </div>
+          ))
+          
 
-          {/* next book details here */}
+          // {/* next book details here */}
+            
+            :
 
-
-
-          {/* if no book added */}
+          // {/* if no book added */}
 
           <div className='flex justify-center items-center flex-col'>
             <img src="https://www.jaivijaybookcentre.com/public/frontend/images/no-record.png" alt="no image" style={{ width: '200px', height: '200px' }} />
             <p className='text-red-500 mt-5'>No Book Brought...</p>
-          </div>
+          </div>}
 
 
 

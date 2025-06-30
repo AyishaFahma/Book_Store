@@ -83,7 +83,7 @@ function Viewbook() {
                         {/* uploaded images */}
 
                         { viewBook?.uploadImages?.map( (item)=> (
-                          <img src={ `${serverurl}/imgUpload/${item.filename}`} alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
+                          <img src={`${serverurl}/imgUpload/${item.filename}`} alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
                         )) }
   
                         

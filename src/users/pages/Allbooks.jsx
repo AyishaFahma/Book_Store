@@ -10,10 +10,10 @@ function Allbooks() {
   const [token, settoken] = useState("")
   const [allBooks, setallBooks] = useState([])
 
-  // to search a book
+  // to search a book in input box
   const [searchKey, setsearchKey] = useState("")
 
-  // to store initial state of book
+  // to store initial state of book that is all book
    const [tempArray, setTempArray] = useState([])
 
 
@@ -27,6 +27,8 @@ function Allbooks() {
 
     const result = await allBooksUserApi(reqHeader , searchKey)
     setallBooks(result.data)
+    //oru filter edunnathinte munne temparrayilekk store cheyyanu
+    setTempArray(result.data)
 
     //console.log(result);
   }
@@ -34,7 +36,7 @@ function Allbooks() {
   console.log(searchKey);
   
 
-  // filter applying function
+  // filter applying function for filtering book on radio button
   
   const filter = (data)=> {
 
@@ -42,6 +44,7 @@ function Allbooks() {
       setallBooks(tempArray)
     }
     else{
+      
       setallBooks(tempArray.filter( (item) => item.category.toLowerCase() == data.toLowerCase()))
     }
 
@@ -59,7 +62,7 @@ function Allbooks() {
       getAllBooks(tok , searchKey)
     }
 
-  }, [ searchKey])
+  }, [searchKey])
 
 
   return (
@@ -144,8 +147,8 @@ function Allbooks() {
           <div className='md:grid grid-cols-4 gap-x-5'>
 
             {allBooks?.length > 0 ?
-             allBooks?.map( (item) => (
-            <div className='p-5 flex justify-center items-center flex-col md:mb-5 mb-10 shadow-lg/30'>
+             allBooks?.map( (item , index) => (
+            <div className='p-5 flex justify-center items-center flex-col md:mb-5 mb-10 shadow-lg/30' key={index}>
               <img src={item?.imageUrl} alt="book image" style={{ width: '100%', height: '300px' }} />
 
               <h1 className='text-blue-600 mt-5'>{item?.author}</h1>
