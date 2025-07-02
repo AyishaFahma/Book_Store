@@ -21,6 +21,12 @@ export const homeBookApi = async() =>{
 }
 
 
+//api to get all jobs in both user and admin
+export const getallJobsApi = async()=>{
+    return await commonApi('GET', `${serverurl}/all-jobs`)
+}
+
+
 
 // ----------------------------------------------------------------
 //                          USER API'S
@@ -71,3 +77,33 @@ export const removeBookApi = async(id) => {
     return await commonApi('DELETE' , `${serverurl}/delete-book/${id}`)
 }
 
+
+
+//---------------------ADMIN-------------------------
+
+
+
+
+//api to get all book for approval rejection 
+export const allBookApi = async()=>{
+    return await commonApi('GET' , `${serverurl}/all-books`)
+}
+
+
+//api to approve book by admin
+export const approveBookApi = async(id)=> {
+    return await commonApi('PUT' ,`${serverurl}/approve-Book/${id}` )
+}
+
+
+//api to get all users
+export const getAllUsersApi = async()=>{
+    return await commonApi('GET' , `${serverurl}/all-users`)
+}
+
+
+
+//api to add job
+export const addJobApi = async(reqBody)=>{
+    return await commonApi('POST' , `${serverurl}/add-job` , reqBody)
+}

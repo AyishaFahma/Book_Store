@@ -256,7 +256,7 @@ function Profile() {
 
       <div className="flex justify-between my-5 px-5 md:px-20">
         <div className='flex justify-center items-center'>
-          <h1 className='md:text-3xl text-2xl'>Ayisha Fahma  <FontAwesomeIcon icon={faCircleCheck} className='text-blue-500 ms-3 mt-2' /></h1>
+          <h1 className='md:text-3xl text-2xl'>Ayisha Fahma<FontAwesomeIcon icon={faCircleCheck} className='text-blue-500 ms-3 mt-2' /></h1>
 
         </div>
 
@@ -403,8 +403,8 @@ function Profile() {
         {bookStatus && <div className='shadow-lg/30 rounded py-8 md:px-5 px-2 my-5 border-gray-200 border'>
           {/* one book details/content */}
           {UserAddedBook?.length > 0 ?
-            UserAddedBook.map( (item) => (
-              <div className='bg-gray-200 p-5 rounded mb-5'>
+            UserAddedBook.map( (item , index) => (
+              <div className='bg-gray-200 p-5 rounded mb-5' key={index}>
             {/* book details part */}
             <div className="md:grid grid-cols-[5fr_2fr] gap-x-5">
 
@@ -426,7 +426,7 @@ function Profile() {
               {/* soldout image */}
               <div >
 
-                {item?.status == 'Pending' ? <img src="https://png.pngtree.com/png-vector/20230830/ourmid/pngtree-pending-imminent-rubber-stamp-image_9932560.png" alt="" style={{ width: '100px', height: '100px' }} /> : item?.status == 'approved' ?
+                {item?.status == 'Pending' ? <img src="https://png.pngtree.com/png-clipart/20230802/original/pngtree-pending-stamp-illustration-symbol-stamp-vector-picture-image_9294534.png" alt="" style={{ width: '100px', height: '100px' }} /> : item?.status == 'Approved' ?
 
                 <img src="https://pngimg.com/d/approved_PNG56.png" alt="" style={{ width: '100px', height: '100px' }} /> :
 

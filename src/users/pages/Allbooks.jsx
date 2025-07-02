@@ -145,10 +145,10 @@ function Allbooks() {
           {/* second card grid */}
 
           <div className='md:grid grid-cols-4 gap-x-5'>
-
+            {/* hidden attribute is used for only approved book can seen by the user. */}
             {allBooks?.length > 0 ?
              allBooks?.map( (item , index) => (
-            <div className='p-5 flex justify-center items-center flex-col md:mb-5 mb-10 shadow-lg/30' key={index}>
+            <div className='p-5 flex justify-center items-center flex-col md:mb-5 mb-10 shadow-lg/30' key={index} hidden={item?.status == 'Pending' || item.status == 'Sold'}>
               <img src={item?.imageUrl} alt="book image" style={{ width: '100%', height: '300px' }} />
 
               <h1 className='text-blue-600 mt-5'>{item?.author}</h1>
