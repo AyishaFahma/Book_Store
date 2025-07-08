@@ -1,12 +1,141 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Footer from '../../components/Footer'
 import Header from '../components/Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCamera, faLocation, faSquareArrowUpRight, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { addApplicationApi, getallJobsApi } from '../../sevices/allApi'
+import { toast, ToastContainer } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function Careers() {
 
   const [modalStatus, setModalStatus] = useState(false)
+
+  //token storing state
+  const [token, settoken] = useState("")
+
+  //search key
+  const [searchKey, setsearchKey] = useState("")
+
+  //all jobs display cheyyanulla state
+  const [allJobs, setallJobs] = useState([])
+
+  //state ctreated for holding apply button modal inputs
+  const [applicationDetails, setapplicationDetails] = useState({
+    
+    jobTitle:"",
+    fullname: "",
+    qualification: "",
+    email: "",
+    phone: "",
+    coverletter: "",
+    resume: ""
+  })
+  console.log(applicationDetails);
+
+  const navigate = useNavigate()
+
+
+  //modal opening function
+  const openModal = (title)=>{
+
+    setModalStatus(true);
+    setapplicationDetails({...applicationDetails,jobTitle:title})
+  }
+
+
+  //reset function
+  const handleReset = () => {
+    setapplicationDetails({
+
+      fullname: "",
+      qualification: "",
+      email: "",
+      phone: "",
+      coverletter: "",
+      resume: ""
+
+    })
+    //modern browser wont allow to set value to file input box empty derectly so
+    document.getElementById("fileinput").value = ""
+  }
+
+
+  //to submit for a job
+  const handleAdd = async() => {
+
+    const {fullname,qualification,email,phone,coverletter,resume} = applicationDetails
+
+    if(!token){
+      toast.info('Please login to apply!!!')
+      navigate('/login')
+    }
+    else if(!fullname || !qualification || !email || !phone || !coverletter || !resume){
+      toast.info('Please fill the form completely')
+    }
+    else{
+
+      const reqHeader = { 
+        "Authorization" :`Bearer ${token}`
+      }
+
+      const reqBody = new FormData()
+
+      // here only one resume / or one upload content so directly given
+
+      for(let key in applicationDetails){
+        reqBody.append( key , applicationDetails[key])
+      }
+
+
+      const result = await addApplicationApi(reqBody,reqHeader)
+      console.log(result);
+
+
+      if(result.status == 200){
+        toast.success('Application Submitted Successfully')
+  
+      }
+      else if (result.status == 406){
+        toast.warning(result.response.data)
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+      handleReset()
+      setModalStatus(false)
+      
+    }
+
+
+  }
+
+
+
+  //to get all jobs added by the admin
+  const getAllJobs = async () => {
+    const result = await getallJobsApi(searchKey)
+    //console.log(result);
+    setallJobs(result.data)
+
+  }
+  //console.log(allJobs);
+
+
+  //useeffect for token verification when apply for a job
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+
+      settoken(sessionStorage.getItem("token"))  
+    }
+  },[])
+
+
+  useEffect(() => {
+    getAllJobs()
+  }, [searchKey])
+
+
   return (
     <>
 
@@ -28,46 +157,55 @@ function Careers() {
 
       <div className="md:grid grid-cols-3 my-10">
         <div></div>
-        <div className='flex md:px-0 px-2'>
-          <input type="text" placeholder='Search By Title' className='bg-white p-2 border border-gray-300 w-full' />
+        <div className='flex md:px-5 px-2'>
+          <input onChange={(e) => setsearchKey(e.target.value)} type="text" placeholder='Search By Title' className='bg-white p-2 border border-gray-300 w-full' />
 
           <button className='bg-green-700 px-4 py-3 text-white hover:bg-green-800'>Search</button>
         </div>
         <div></div>
       </div>
 
-     {/* contents for job openings sec */}
-      <div className='md:grid grid-cols-[1fr_4fr_1fr]  my-10 px-4 md:px-0'>
-        <div></div>
+      {/* contents for job openings sec */}
+      {allJobs?.length > 0 ?
+        allJobs?.map((item) => (
+          <div className='md:grid grid-cols-[1fr_4fr_1fr]  my-10 px-4 md:px-0'>
+            <div></div>
 
-        <div className='p-5 shadow-lg rounded border border-gray-200'>
-          <div className="grid grid-cols-[8fr_1fr]">
-            <div>
-              <h1 className='text-xl'>Job Title</h1>
-              <hr className='border-gray-300 mt-3' />
+
+            <div className='p-5 shadow-lg rounded border border-gray-200'>
+              <div className="grid grid-cols-[8fr_1fr]">
+                <div>
+                  <h1 className='text-xl'>Job Title : {item?.title}</h1>
+                  <hr className='border-gray-300 mt-3' />
+                </div>
+
+                <div >
+                  <button onClick={() => openModal(item?.title)} className='bg-blue-900 px-4 py-2 rounded text-white ms-4'>Apply< FontAwesomeIcon icon={faSquareArrowUpRight} className='ms-1' /></button>
+                </div>
+
+              </div>
+
+              <div className='my-4'>
+
+                <h1 className='text-blue-700'>< FontAwesomeIcon icon={faLocation} />Location: {item?.location}</h1>
+                <h1 className='mt-3'>Job Type :{item?.jType}</h1>
+                <h1 className='mt-3'>Salary : {item?.salary}</h1>
+                <h1 className='mt-3'>Qualification :{item?.qualification}</h1>
+                <h1 className='mt-3'>Experience : {item?.experience}</h1>
+                <h1 className='mt-3 text-justify'>Description : {item?.description}</h1>
+
+              </div>
+
+
             </div>
 
-            <div >
-              <button onClick={() => setModalStatus(true)} className='bg-blue-900 px-4 py-2 rounded text-white ms-4'>Apply< FontAwesomeIcon icon={faSquareArrowUpRight} className='ms-1' /></button>
-            </div>
 
+            <div></div>
           </div>
+        ))
+        :
 
-          <div className='my-4'>
-
-            <h1 className='text-blue-700'>< FontAwesomeIcon icon={faLocation} />Location</h1>
-            <h1 className='mt-3'>Job Type :</h1>
-            <h1 className='mt-3'>Salary :</h1>
-            <h1 className='mt-3'>Qualification :</h1>
-            <h1 className='mt-3'>Experience :</h1>
-            <h1 className='mt-3 text-justify'>Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, iusto. Quasi fuga vel deserunt at ea error illum dicta itaque facere, odit magnam eligendi. Fuga vitae expedita non cumque aspernatur.</h1>
-
-          </div>
-
-
-        </div>
-        <div></div>
-      </div>
+        <p className='text-2xl text-red-500'>No Openings...</p>}
 
 
 
@@ -92,32 +230,42 @@ function Careers() {
 
                   <div className="md:grid grid-cols-2">
                     <div className='px-2'>
+
                       <div className='mb-3'>
-                        <input type="text" placeholder='Full Name' className='p-2 border border-gray-200 w-full rounded' />
+                        <input value={applicationDetails.fullname} onChange={(e) => setapplicationDetails({ ...applicationDetails, fullname: e.target.value })} type="text" placeholder='Full Name' className='p-2 border border-gray-200 w-full rounded' />
                       </div>
+
                       <div className='mb-3'>
-                        <input type="text" placeholder='Email-Id' className='p-2 border border-gray-200 w-full rounded' />
+                        <input value={applicationDetails.email} onChange={(e) => setapplicationDetails({ ...applicationDetails, email: e.target.value })} type="text" placeholder='Email-Id' className='p-2 border border-gray-200 w-full rounded' />
                       </div>
+
                     </div>
 
                     <div className='px-2'>
+
                       <div className='mb-3'>
-                        <input type="text" placeholder='Qualification' className='p-2 border border-gray-200 w-full rounded' />
+                        <input value={applicationDetails.qualification} onChange={(e) => setapplicationDetails({ ...applicationDetails, qualification: e.target.value })} type="text" placeholder='Qualification' className='p-2 border border-gray-200 w-full rounded' />
                       </div>
+
                       <div className='mb-3'>
-                        <input type="text" placeholder='Phone' className='p-2 border border-gray-200 w-full rounded' />
+                        <input value={applicationDetails.phone} onChange={(e) => setapplicationDetails({ ...applicationDetails, phone: e.target.value })} type="text" placeholder='Phone' className='p-2 border border-gray-200 w-full rounded' />
                       </div>
+
                     </div>
                   </div>
 
 
                   <div className='px-2 mb-3'>
-                    <textarea placeholder='Cover Letter' className='p-2 border border-gray-200 w-full rounded'>
+
+                    <textarea value={applicationDetails.coverletter} onChange={(e) => setapplicationDetails({ ...applicationDetails, coverletter: e.target.value })} placeholder='Cover Letter' className='p-2 border border-gray-200 w-full rounded'>
                     </textarea>
+
                   </div>
 
                   <div className='px-2 mb-3'>
-                    <input type='file' className='border border-gray-200 w-full rounded file:bg-gray-400 file:p-2 file:text-gray-800'
+                    <label htmlFor="" className='mb-2'>Upload resume</label>
+
+                    <input onChange={(e) => setapplicationDetails({ ...applicationDetails, resume: e.target.files[0] })} id='fileinput' type='file' className='border border-gray-200 w-full rounded file:bg-gray-400 file:p-2 file:text-gray-800'
                     />
                   </div>
 
@@ -126,9 +274,9 @@ function Careers() {
                 {/* modal footer */}
 
                 <div className='bg-gray-300 px-4 py-3 sm:flex  sm:flex-row-reverse sm:px-6'>
-                  <button type='button' className='inline-flex w-full justify-center bg-orange-500 rounded md:text-xl py-2 px-4 text-white hover:bg-orange-700 sm:ml-3 sm:w-auto'>Reset</button>
+                  <button type='button' onClick={handleReset} className='inline-flex w-full justify-center bg-orange-500 rounded md:text-xl py-2 px-4 text-white hover:bg-orange-700 sm:ml-3 sm:w-auto'>Reset</button>
 
-                  <button type='button' className='inline-flex w-full justify-center bg-green-700 rounded md:text-xl py-2 px-4 text-white hover:bg-green-500 sm:w-auto mt-3 sm:mt-0'>Submit</button>
+                  <button type='button' onClick={handleAdd} className='inline-flex w-full justify-center bg-green-700 rounded md:text-xl py-2 px-4 text-white hover:bg-green-500 sm:w-auto mt-3 sm:mt-0'>Submit</button>
                 </div>
 
 
@@ -140,6 +288,8 @@ function Careers() {
       </div>}
 
       <Footer />
+
+      <ToastContainer theme='colored' position='top-center' autoClose={2000}/>
 
     </>
   )

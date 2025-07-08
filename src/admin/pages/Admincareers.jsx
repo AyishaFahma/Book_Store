@@ -5,7 +5,9 @@ import Adminsidebar from '../components/Adminsidebar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLocation, faSquareArrowUpRight, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { toast, ToastContainer } from 'react-toastify'
-import { addJobApi, getallJobsApi } from '../../sevices/allApi'
+import { addJobApi, getAllApplicationApi, getallJobsApi, removeJobApi } from '../../sevices/allApi'
+import { serverurl } from '../../sevices/serverurl'
+import { Link } from 'react-router-dom'
 
 function Admincareers() {
 
@@ -15,6 +17,17 @@ function Admincareers() {
   const [modalStatus, setModalStatus] = useState(false)
 
   const [allJob, setallJob] = useState([])
+
+  const [addStatus, setaddStatus] = useState([])
+
+  //for searching job
+  const [searchKey, setsearchKey] = useState("")
+
+  //state for holding delete job 
+  const [deleteStatus, setdeleteStatus] = useState({})
+
+  //state for holding all applications of user
+  const [applications, setApplications] = useState([])
 
 
   // state for add job modal input data
@@ -50,6 +63,7 @@ function Admincareers() {
         toast.success('Job Added Successfully')
         handleReset()
         setModalStatus(false)
+        setaddStatus(result)
       }
       else if(result.status == 401){
         toast.warning(result.response.data)
@@ -79,17 +93,52 @@ function Admincareers() {
 
 
   //get all jobs
-  const getAllJobs = async()=>{
-    const result = getallJobsApi()
+  const getAllJobs = async(searchKey)=>{
+    const result = await getallJobsApi(searchKey)
     setallJob(result.data);
-    
+     
   }
   console.log(allJob);
+  // console.log('alljobs are');
+
+  //delete job function
+  const handleDeleteJob = async(id)=>{
+
+    const result = await removeJobApi(id)
+    console.log(result);
+
+    if(result.status == 200){
+        setdeleteStatus(result)
+    }
+    else{
+      toast.error('Something went wrong')
+    }
+  }
+  
+
+  //get all application of user
+
+  const getallApplications = async()=>{
+
+    const result = await getAllApplicationApi()
+    //console.log(result);
+
+    if(result.status == 200){
+      setApplications(result.data)
+    }
+     
+  }
+  console.log(applications);
   
 
   useEffect( ()=>{
-    getAllJobs()
-  },[])
+    getAllJobs(searchKey)
+
+    if(viewApplicant == true){
+      getallApplications()
+    }
+
+  },[addStatus , searchKey , deleteStatus , viewApplicant])
 
 
 
@@ -120,7 +169,7 @@ function Admincareers() {
             <div className='md:mx-10 px-2 w-full'>
               {/* input box field */}
               <div className='flex '>
-                <input type="text" placeholder='Job Title' className='bg-white p-2 border border-gray-300 w-full' />
+                <input onChange={(e)=>setsearchKey(e.target.value)} type="text" placeholder='Job Title' className='bg-white p-2 border border-gray-300 w-full' />
 
                 <button className='bg-green-700 px-4 py-3 text-white hover:bg-green-800'>Search</button>
               </div>
@@ -139,32 +188,38 @@ function Admincareers() {
             <div className='md:grid grid-cols-[4fr] my-10 px-4 md:px-10'>
 
 
-              <div className='p-5 shadow-lg rounded border border-gray-200'>
+               
+              {allJob?.length > 0 ? 
+              allJob?.map( (item , index) => (
+                <div className='p-5 shadow-lg rounded border border-gray-200' key={index}>
                 <div className="grid grid-cols-[8fr_1fr]">
                   <div>
-                    <h1 className='text-xl'>Job Title</h1>
+                    <h1 className='text-xl'>Job Title : {item?.title}</h1>
                     <hr className='border-gray-300 mt-3' />
                   </div>
 
                   <div >
-                    <button className='bg-red-700 px-4 py-2 rounded text-white ms-4'>Delete< FontAwesomeIcon icon={faTrash} className='ms-1' /></button>
+                    <button type='button' onClick={()=>handleDeleteJob(item._id)} className='bg-red-700 px-4 py-2 rounded text-white ms-4'>Delete< FontAwesomeIcon icon={faTrash} className='ms-1' /></button>
                   </div>
 
                 </div>
 
                 <div className='my-4'>
 
-                  <h1 className='text-blue-700'>< FontAwesomeIcon icon={faLocation} />Location</h1>
-                  <h1 className='mt-3'>Job Type :</h1>
-                  <h1 className='mt-3'>Salary :</h1>
-                  <h1 className='mt-3'>Qualification :</h1>
-                  <h1 className='mt-3'>Experience :</h1>
-                  <h1 className='mt-3 text-justify'>Description : Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus, iusto. Quasi fuga vel deserunt at ea error illum dicta itaque facere, odit magnam eligendi. Fuga vitae expedita non cumque aspernatur.</h1>
+                  <h1 className='text-blue-700'>< FontAwesomeIcon icon={faLocation} />Location : {item?.location}</h1>
+                  <h1 className='mt-3'>Job Type : {item?.jType}</h1>
+                  <h1 className='mt-3'>Salary : {item?.salary}</h1>
+                  <h1 className='mt-3'>Qualification :{item?.qualification}</h1>
+                  <h1 className='mt-3'>Experience : {item?.experience}</h1>
+                  <h1 className='mt-3 text-justify'>Description : {item?.description}</h1>
 
                 </div>
 
 
               </div>
+              )) 
+              :
+              <p>No Job Added yet</p>}
 
             </div>}
 
@@ -244,7 +299,8 @@ function Admincareers() {
 
           {/* conditional rendering for view applicant */}
           {viewApplicant && <div className='md:grid grid-cols-[4fr] my-10 px-4 md:px-10 overflow-x-auto'>
-            <table className='table-auto min-w-full border border-blue-400'>
+
+            {applications?.length > 0 ?<table className='table-auto min-w-full border border-blue-400'>
 
               <thead>
                 <tr className='bg-blue-500 text-white'>
@@ -262,19 +318,28 @@ function Admincareers() {
               <tbody>
                 {/* table row */}
 
-                <tr className='hover:bg-blue-50'>
-                  <td className='border border-blue-200 px-4 py-2 text-center'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
-                  <td className='border border-blue-200 px-4 py-2'></td>
+                { applications?.map((item , index)=> (
+                  <tr className='hover:bg-blue-50' key={index}>
+
+                  <td className='border border-blue-200 px-4 py-2 text-center'>{index + 1}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.jobTitle}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.name}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.qualification}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.email}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.phone}</td>
+                  <td className='border border-blue-200 px-4 py-2'>{item?.coverLetter}</td>
+
+                  <td className='border border-blue-200 px-4 py-2'><Link to={`${serverurl}/pdfUploads/${item?.resume}`} target='_blank' className='text-blue-700 underline'>Resume</Link></td>
+
                 </tr>
+                )) }
 
               </tbody>
             </table>
+                   
+                   :
+            <p className='text-2xl text-red-500'>No Applications Added Yet!...</p>}
+
           </div>
           }
 

@@ -22,8 +22,14 @@ export const homeBookApi = async() =>{
 
 
 //api to get all jobs in both user and admin
-export const getallJobsApi = async()=>{
-    return await commonApi('GET', `${serverurl}/all-jobs`)
+export const getallJobsApi = async(searchKey)=>{
+    return await commonApi('GET', `${serverurl}/all-jobs?search=${searchKey}`)
+}
+
+
+//api to edit profile
+export const editprofileApi = async(reqBody , reqHeader)=>{
+    return await commonApi('PUT' , `${serverurl}/edit-profile` , reqBody , reqHeader)
 }
 
 
@@ -78,6 +84,12 @@ export const removeBookApi = async(id) => {
 }
 
 
+//api to add application
+export const addApplicationApi = async(reqBody , reqHeader)=>{
+    return await commonApi('POST', `${serverurl}/add-application` , reqBody , reqHeader)
+}
+
+
 
 //---------------------ADMIN-------------------------
 
@@ -106,4 +118,14 @@ export const getAllUsersApi = async()=>{
 //api to add job
 export const addJobApi = async(reqBody)=>{
     return await commonApi('POST' , `${serverurl}/add-job` , reqBody)
+}
+
+//api to delete a job
+export const removeJobApi = async(id)=>{
+    return await commonApi('DELETE' , `${serverurl}/delete-job/${id}`)
+}
+
+//api to get all application
+export const getAllApplicationApi = async()=>{
+    return await commonApi('GET' , `${serverurl}/all-application`)
 }
