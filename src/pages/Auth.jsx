@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useState } from 'react'
 import { Link, useNavigate, useNavigation } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
-import { loginApi, registerApi } from '../sevices/allApi'
+import { googleLoginApi, loginApi, registerApi } from '../sevices/allApi'
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 function Auth({ register }) {
 
@@ -99,33 +101,33 @@ function Auth({ register }) {
 
         // login admin or user aneel navigate cheyyunnath change cheyyanu
 
-        if(result.data.existingUser.email == 'admin@gmail.com') {
-          setTimeout( () =>{
-          navigate('/admin-home')
-        }, 2005)
+        if (result.data.existingUser.email == 'admin@gmail.com') {
+          setTimeout(() => {
+            navigate('/admin-home')
+          }, 2005)
         }
         else {
           // after login success home pageilekk move akanam , but here toast kandathinu shesham mathram move ayaal mathi
-        setTimeout( () =>{
-          navigate('/')
-        }, 2005)
+          setTimeout(() => {
+            navigate('/')
+          }, 2005)
 
         }
       }
 
       // result not success
-      else if(result.status == 403 || result.status == 406){
+      else if (result.status == 403 || result.status == 406) {
         toast.warning(result.response.data)
-        setUserDetails( {
+        setUserDetails({
           username: "",
           email: "",
           password: ""
         })
       }
 
-      else{
+      else {
         toast.error('Something went wrong')
-        setUserDetails( {
+        setUserDetails({
           username: "",
           email: "",
           password: ""
@@ -135,6 +137,38 @@ function Auth({ register }) {
     }
 
   }
+
+
+  //google login credential 
+  const handleGoogleLogin = async (credentialResponse) => {
+    console.log(credentialResponse);
+    //To verify and extract user data, you may want to decode the token like this
+    
+    const details = jwtDecode(credentialResponse.credential)
+    console.log(details); // will show email, name, picture, etc.
+
+
+    const result = await googleLoginApi({ username: details.name, email: details.email, password: 'googlepass', photo: details.picture })
+    console.log(result);
+
+    if (result.status == 200) {
+      toast.success('Login Successfull')
+      sessionStorage.setItem("existingUser", JSON.stringify(result.data.existingUser))
+      sessionStorage.setItem("token", result.data.token)
+
+      setTimeout(() => {
+        navigate('/')
+      }, 2005)
+
+    }
+    else{
+      toast.error('Something went wrong')
+    }
+
+  }
+
+
+
 
   return (
     <>
@@ -183,7 +217,18 @@ function Auth({ register }) {
 
                 <div className="my-3 w-full">
 
-                  <button className='bg-white p-2 w-full rounded text-black'>Google Login</button>
+                  {/* google login - this is take from the react oath website */}
+
+                  <GoogleLogin width={'300px'}
+                    onSuccess={credentialResponse => {
+                      //console.log(credentialResponse);
+                      handleGoogleLogin(credentialResponse)
+                    }}
+                    onError={() => {
+                      //console.log('Login Failed');
+                      toast.error('Login Failed!!!')
+                    }}
+                  />
 
                 </div>
               </div>}

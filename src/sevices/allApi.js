@@ -15,6 +15,12 @@ export const loginApi = async(reqBody) =>{
 }
 
 
+//google login api
+export const googleLoginApi = async(reqBody)=>{
+    return await commonApi('POST', `${serverurl}/google-login` , reqBody)
+}
+
+
 //api to get latest 4 book in home
 export const homeBookApi = async() =>{
     return commonApi('GET' , `${serverurl}/home-books`)

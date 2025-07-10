@@ -14,13 +14,22 @@ function Header() {
 
   const [token, settoken] = useState("")
 
+  //to get the user profile image
+  const [userProfile, setuserProfile] = useState("")
+
   useEffect( ()=>{
     // if session storagil token ndoo check chyyum
 
     if(sessionStorage.getItem("token")){
       settoken(sessionStorage.getItem("token"))
+
+      setuserProfile()
+
     }
   })
+
+
+
   return (
     <>
 
