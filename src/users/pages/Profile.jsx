@@ -52,6 +52,14 @@ function Profile() {
   const [deleteStatus, setdeleteStatus] = useState([])
 
 
+  //state for  editing profile
+  const [userDetails, setuserDetails] = useState({
+    username: "",
+    bio: "",
+    profile: ""
+  })
+
+
   //console.log(bookDetails);
 
 
@@ -243,6 +251,23 @@ function Profile() {
 
 
 
+  //useeffect for profile editing sec
+  useEffect( ()=>{
+
+    if(sessionStorage.getItem("token")){
+      const user = JSON.parse(sessionStorage.getItem('existingUser'))
+
+      setuserDetails( {
+        username:user.username,
+        bio:user.bio,
+        profile:user.profile
+      })
+    }
+
+  },[])
+
+
+
   return (
     <>
 
@@ -251,12 +276,14 @@ function Profile() {
       <div className='bg-blue-950' style={{ height: '200px' }}></div>
       {/* profile round part */}
       <div style={{ width: '180px', height: '180px', borderRadius: '50%', marginTop: '-130px', marginLeft: '70px' }} className='p-3 flex justify-center items-center bg-white'>
-        <img src="https://media.istockphoto.com/id/967091776/photo/long-haired-woman-standing-with-arms-crossed.jpg?s=612x612&w=0&k=20&c=gCxvfyl5eDZlYRZlF7IqUGXz2YMxRLsK1_LOFjn4UTo=" alt="no image" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+
+        <img src={userDetails.profile == "" ? "https://www.pikpng.com/pngl/b/53-531718_free-high-quality-person-icon-icon-clipart.png" : userDetails.profile?.startsWith('https') ? userDetails.profile : `${serverurl}/imgUpload/${userDetails.profile}`} alt="" style={{width:'150px' , height:'150px' , borderRadius:'50%'}} referrerPolicy='no-referrer'/>
+
       </div>
 
       <div className="flex justify-between my-5 px-5 md:px-20">
         <div className='flex justify-center items-center'>
-          <h1 className='md:text-3xl text-2xl'>Ayisha Fahma<FontAwesomeIcon icon={faCircleCheck} className='text-blue-500 ms-3 mt-2' /></h1>
+          <h1 className='md:text-3xl text-2xl'>{userDetails.username}<FontAwesomeIcon icon={faCircleCheck} className='text-blue-500 ms-3 mt-2' /></h1>
 
         </div>
 
@@ -265,7 +292,7 @@ function Profile() {
         <Editprofile />
       </div>
 
-      <p className='md:px-20 px-5 my-5 text-lg text-justify'>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ex incidunt suscipit ut ad, temporibus quis cumque voluptas dignissimos doloribus aperiam? Excepturi totam nulla omnis quas dolores quos voluptatum ratione fugit. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti expedita ullam, id eius hic pariatur alias. Explicabo cumque laborum, dolore, earum doloremque, at enim dolores aliquam minus deserunt fugit nisi?</p>
+      <p className='md:px-20 px-5 my-5 text-lg text-justify'>{userDetails.bio == '' ? 'im using BookStore' : userDetails.bio} </p>
 
       <div className='md:px-40 px-5'>
 

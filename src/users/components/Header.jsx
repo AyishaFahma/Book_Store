@@ -3,6 +3,7 @@ import { faAddressCard, faBars, faPerson, faPowerOff, faUser } from '@fortawesom
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { serverurl } from '../../sevices/serverurl'
 
 function Header() {
 
@@ -17,13 +18,16 @@ function Header() {
   //to get the user profile image
   const [userProfile, setuserProfile] = useState("")
 
+  console.log(userProfile);
+  
+
   useEffect( ()=>{
     // if session storagil token ndoo check chyyum
 
     if(sessionStorage.getItem("token")){
       settoken(sessionStorage.getItem("token"))
 
-      setuserProfile()
+      setuserProfile(JSON.parse(sessionStorage.getItem("existingUser")).profile)
 
     }
   })
@@ -69,7 +73,7 @@ function Header() {
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
-                  <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" alt="" style={{width:'70px' , height:'50px'}}/>
+                  <img src={userProfile == "" ? "https://www.pikpng.com/pngl/b/53-531718_free-high-quality-person-icon-icon-clipart.png" : userProfile.startsWith('https') ? userProfile : `${serverurl}/imgUpload/${userProfile}`} alt="" style={{width:'50px' , height:'50px' , borderRadius:'50%'}} referrerPolicy='no-referrer'/>
                   
                   
                 </button>
@@ -114,7 +118,7 @@ function Header() {
               <div>
                 <button onClick={()=>setdropDownStatus(!dropdownStatus)} type="button" className="inline-flex w-full justify-center gap-x-1.5 rounded-md  px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs " id="menu-button" aria-expanded="true" aria-haspopup="true">
 
-                  <img src="https://static.vecteezy.com/system/resources/previews/019/879/186/non_2x/user-icon-on-transparent-background-free-png.png" alt="" style={{width:'70px' , height:'50px'}}/>
+                  <img src={userProfile == "" ? "https://www.pikpng.com/pngl/b/53-531718_free-high-quality-person-icon-icon-clipart.png" : userProfile.startsWith('https') ? userProfile : `${serverurl}/imgUpload/${userProfile}`} alt="" style={{width:'50px' , height:'50px' , borderRadius:'50%'}} referrerPolicy='no-referrer'/>
                   
                   
                 </button>
