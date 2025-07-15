@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Adminheader from '../components/Adminheader'
 import Footer from '../../components/Footer'
 import Adminsidebar from '../components/Adminsidebar'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faUser, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons'
 import { Bar, BarChart, CartesianGrid, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { allBookApi, getAllApplicationApi, getAllUsersApi } from '../../sevices/allApi'
 
 function Adminhome() {
 
-  // barchart data
+
+  const [noofBooks, setnoofBooks] = useState("")
+  const [noofUsers, setnoofUsers] = useState("")
+  const [noofApp, setnoofApp] = useState("")
+
+// barchart data
 
   const data = [
   {
@@ -47,7 +53,6 @@ function Adminhome() {
     "pv": 4300
   }
 ]
-
 // pichart data
 
 const data01 = [
@@ -103,6 +108,23 @@ const data02 = [
   }
 ];
 
+//to get all books users, numbers
+const getDetails = async()=>{
+
+  let result = await allBookApi()
+  setnoofBooks(result.data.length)
+
+  let result1 = await getAllUsersApi()
+  setnoofUsers(result1.data.length)
+
+  let result2 = await getAllApplicationApi()
+  setnoofApp(result2.data.length)
+}
+
+useEffect( ()=>{
+  getDetails()
+},[])
+
 
 
 
@@ -128,7 +150,7 @@ const data02 = [
                 </div>
                 <div className='text-center'>
                   <h1 className='text-2xl'>Total number of Books</h1>
-                  <h1 className='text-xl '>100+</h1>
+                  <h1 className='text-xl '>{noofBooks}+</h1>
                 </div>
               </div>
             </div>
@@ -141,7 +163,7 @@ const data02 = [
                 </div>
                 <div className='text-center'>
                   <h1 className='text-2xl'>Total number of Users</h1>
-                  <h1 className='text-xl'>100+</h1>
+                  <h1 className='text-xl'>{noofUsers}+</h1>
                 </div>
               </div>
 
@@ -154,8 +176,8 @@ const data02 = [
                   <FontAwesomeIcon icon={faUserTie} className='fa-3x' />
                 </div>
                 <div className='text-center'>
-                  <h1 className='text-2xl'>Total number of Employee</h1>
-                  <h1 className='text-xl'>100+</h1>
+                  <h1 className='text-2xl'>Total number of Applicants</h1>
+                  <h1 className='text-xl'>{noofApp}+</h1>
                 </div>
               </div>
 

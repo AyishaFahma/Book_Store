@@ -17,6 +17,8 @@ import Adminhome from './admin/pages/Adminhome'
 import Adminbooks from './admin/pages/Adminbooks'
 import Admincareers from './admin/pages/Admincareers'
 import Adminsettings from './admin/pages/Adminsettings'
+import Paymentsuccess from './users/pages/Paymentsuccess'
+import Paymenterror from './users/pages/Paymenterror'
 
 
 
@@ -56,7 +58,13 @@ function App() {
 
         <Route path='/view-book/:id' element={<Viewbook />} />
 
+        <Route path='/payment-success' element={<Paymentsuccess />} />
+
+        <Route path='/payment-error' element={<Paymenterror />} />
+
         <Route path='/profile' element={<Profile />} />
+
+
 
 
 

@@ -96,6 +96,12 @@ export const addApplicationApi = async(reqBody , reqHeader)=>{
 }
 
 
+//api to make payment
+export const makePaymentApi = async(reqBody , reqHeader)=>{
+    return await commonApi('PUT' , `${serverurl}/make-payment` , reqBody , reqHeader )
+}
+
+
 
 //---------------------ADMIN-------------------------
 

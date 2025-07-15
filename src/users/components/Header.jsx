@@ -1,9 +1,10 @@
 import { faFacebook, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faAddressCard, faBars, faPerson, faPowerOff, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { serverurl } from '../../sevices/serverurl'
+import { userProfileUpdateStatusContext } from '../../context/Contextshare'
 
 function Header() {
 
@@ -18,7 +19,22 @@ function Header() {
   //to get the user profile image
   const [userProfile, setuserProfile] = useState("")
 
+  const navigate = useNavigate()
+
+
+  //context api part
+  const {userProfileUpdateStatus} = useContext(userProfileUpdateStatusContext)
+
   console.log(userProfile);
+
+
+
+  const handleLogout = ()=>{
+    sessionStorage.removeItem("existingUser")
+    sessionStorage.removeItem("token")
+    navigate('/')
+    
+  }
   
 
   useEffect( ()=>{
@@ -30,7 +46,7 @@ function Header() {
       setuserProfile(JSON.parse(sessionStorage.getItem("existingUser")).profile)
 
     }
-  })
+  },[userProfileUpdateStatus])
 
 
 
@@ -85,7 +101,7 @@ function Header() {
 
                   <Link to={'/profile'}><a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"><FontAwesomeIcon icon={faUser} className='me-2'/>Profile</a></Link>
 
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
+                  <a onClick={handleLogout} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
 
                   
                 </div>
@@ -130,7 +146,7 @@ function Header() {
 
                   <Link to={'/profile'}><a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"><FontAwesomeIcon icon={faUser} className='me-2'/>Profile</a></Link>
 
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
+                  <a onClick={handleLogout} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
 
                   
                 </div>

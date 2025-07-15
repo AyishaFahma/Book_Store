@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,6 +6,8 @@ import { faCircleCheck,  faPlus } from '@fortawesome/free-solid-svg-icons'
 import Editprofile from '../components/Editprofile'
 import { toast, ToastContainer } from 'react-toastify'
 import { addBookApi, allUserAddedBookApi, allUserbroughtBookApi, removeBookApi } from '../../sevices/allApi'
+import { serverurl } from '../../sevices/serverurl'
+import { userProfileUpdateStatusContext } from '../../context/Contextshare'
 
 function Profile() {
 
@@ -58,6 +60,10 @@ function Profile() {
     bio: "",
     profile: ""
   })
+
+
+  //context api
+  const {userProfileUpdateStatus} = useContext(userProfileUpdateStatusContext)
 
 
   //console.log(bookDetails);
@@ -264,7 +270,7 @@ function Profile() {
       })
     }
 
-  },[])
+  },[userProfileUpdateStatus])
 
 
 

@@ -4,8 +4,9 @@ import Footer from '../../components/Footer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faCamera, faEye, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { Link, useParams } from 'react-router-dom'
-import { viewBookApi } from '../../sevices/allApi'
+import { makePaymentApi, viewBookApi } from '../../sevices/allApi'
 import { serverurl } from '../../sevices/serverurl'
+import {loadStripe} from '@stripe/stripe-js';
 
 function Viewbook() {
 
@@ -14,25 +15,68 @@ function Viewbook() {
 
   const [viewBook, setviewbook] = useState([])
 
+  //token
+  const [token, settoken] = useState("")
+
 
   // when viewbook button click , we get id in the path (browser) , here useparams hook is used to get the id of book
   // pathile parameter access cheyyan useparams use akkam
-  const {id} = useParams()
+  const { id } = useParams()
   console.log(id);
 
 
-  const getViewBookDetails = async(id) => {
+  const getViewBookDetails = async (id) => {
     const result = await viewBookApi(id)
     setviewbook(result.data)
 
   }
-  console.log(viewBook);
+  //console.log(viewBook);
 
-  useEffect( ()=>{
+
+
+  const makePayment = async () => {
+    console.log(viewBook);
+
+    const reqBody = {
+      bookDetails: viewBook
+    }
+
+    const reqHeader = {
+      "Authorization": `Bearer ${token}`
+    }
+
+    //api calling
+    const result = await makePaymentApi(reqBody , reqHeader)
+    console.log(result);
+
+
+    const sessionId = result.data.sessionId
+    console.log(sessionId);
+
+    //stripe object instance to load the stripe page in frontend
+    const stripe = await loadStripe('pk_test_51RkynDQdI6ShKYOhn7vQKHc7mwHZmU63pB1G0skFS7o4CwJweNvCnDPPsKsm0ptSLdK2swRX4pSpuPC8HWxvjWHN00Tf5TWhB9');
+
+    //redirect to the page based on the output
+    const response = stripe.redirectToCheckout( {
+      sessionId:sessionId
+    })
+    
+    if(response.error){
+      alert('Something went wrong')
+    }
+
+  }
+
+
+
+  useEffect(() => {
     getViewBookDetails(id)
-  },[])
-  
-  
+    if(sessionStorage.getItem("token")) {
+      settoken(sessionStorage.getItem("token"))
+    }
+  }, [])
+
+
 
 
   return (
@@ -54,12 +98,12 @@ function Viewbook() {
 
           {/* eye button icon for modal */}
 
-          <div className='flex items-baseline justify-end '><button onClick={()=>setModalStatus(true)} className='text-2xl text-gray-600 cursor-pointer'><FontAwesomeIcon icon={faEye} /></button></div>
+          <div className='flex items-baseline justify-end '><button onClick={() => setModalStatus(true)} className='text-2xl text-gray-600 cursor-pointer'><FontAwesomeIcon icon={faEye} /></button></div>
 
 
-         {/* modal  */}
+          {/* modal  */}
 
-         { modalStatus && <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+          {modalStatus && <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
             <div className="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
 
@@ -73,20 +117,20 @@ function Viewbook() {
 
                     <div className='bg-blue-950 p-4 text-white flex justify-between items-center'>
                       <p className='text-xl'>Book Photos</p>
-                      < FontAwesomeIcon icon={faXmark} className='fa-2x cursor-pointer' onClick={()=>setModalStatus(false)} />
+                      < FontAwesomeIcon icon={faXmark} className='fa-2x cursor-pointer' onClick={() => setModalStatus(false)} />
                     </div>
                     {/* body of modal */}
                     <div className='p-4'>
-                      <h1 className='text-blue-500'><FontAwesomeIcon icon={faCamera} className='me-3'/> Camera click of the book in the hand of seller</h1>
+                      <h1 className='text-blue-500'><FontAwesomeIcon icon={faCamera} className='me-3' /> Camera click of the book in the hand of seller</h1>
 
                       <div className='md:flex p-5'>
                         {/* uploaded images */}
 
-                        { viewBook?.uploadImages?.map( (item)=> (
-                          <img src={`${serverurl}/imgUpload/${item.filename}`} alt="no image" style={{width:'300px' , height:'300px'}} className='mx-2 mb-2 md:mb-0'/>
-                        )) }
-  
-                        
+                        {viewBook?.uploadImages?.map((item) => (
+                          <img src={`${serverurl}/imgUpload/${item.filename}`} alt="no image" style={{ width: '300px', height: '300px' }} className='mx-2 mb-2 md:mb-0' />
+                        ))}
+
+
                       </div>
 
                     </div>
@@ -137,7 +181,8 @@ function Viewbook() {
             <div className='mt-20 justify-between flex gap-x-5'>
               <Link to={'/all-books'}><button className='bg-blue-900 rounded text-xl py-2 px-5 text-white hover:bg-blue-700  items-center '><FontAwesomeIcon icon={faBackward} className='me-2 text-xl' />BACK</button></Link>
 
-              <button className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>{viewBook?.dprice}</span></button>
+              <button onClick={makePayment} className='bg-green-700 rounded text-xl py-2 px-5 text-white hover:bg-green-500'>BUY $<span className='ms-2'>{viewBook?.dprice}</span></button>
+
             </div>
           </div>
 

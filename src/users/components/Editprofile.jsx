@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { serverurl } from '../../sevices/serverurl'
 import { toast, ToastContainer } from 'react-toastify'
 import { editprofileApi } from '../../sevices/allApi'
+import { useContext } from 'react'
+import { userProfileUpdateStatusContext } from '../../context/Contextshare'
 
 function Editprofile() {
 
@@ -25,6 +27,10 @@ function Editprofile() {
   console.log(token);
 
   const [preview, setpreview] = useState("")
+
+  //api result storing state
+  //context api
+  const {setuserProfileUpdateStatus} = useContext(userProfileUpdateStatusContext)
 
 
   //profile pic upload
@@ -54,7 +60,7 @@ function Editprofile() {
   }
 
   //submit
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
 
     const { username, password, confirmpassword, bio } = userDetails
 
@@ -77,21 +83,43 @@ function Editprofile() {
 
           const reqbody = new FormData()
 
-          for (let key in userDetails){
-            if(key != 'confirmpassword'){
-              reqbody.append(key , userDetails[key])
+          for (let key in userDetails) {
+            if (key != 'confirmpassword') {
+              reqbody.append(key, userDetails[key])
             }
           }
 
-          const result = await editprofileApi(reqbody , reqHeader)
+          const result = await editprofileApi(reqbody, reqHeader)
           console.log(result);
-          
+
+          if (result.status == 200) {
+            toast.success('Profile Updated Successfully')
+            sessionStorage.setItem("existingUser", JSON.stringify(result.data))
+            setuserProfileUpdateStatus(result)
+            setOffCanvasStatus(false)
+
+          }
+          else {
+            toast.error('Something went wrong')
+          }
+
 
         }
         else {
 
-          const result = await editprofileApi({username , password , profile:existingProfile , bio} , reqHeader)
+          const result = await editprofileApi({ username, password, profile: existingProfile, bio }, reqHeader)
           console.log(result);
+
+          if (result.status == 200) {
+            toast.success('Profile Updated Successfully')
+            sessionStorage.setItem("existingUser", JSON.stringify(result.data))
+            setuserProfileUpdateStatus(result)
+            setOffCanvasStatus(false)
+            
+          }
+          else {
+            toast.error('Something went wrong')
+          }
 
 
         }
