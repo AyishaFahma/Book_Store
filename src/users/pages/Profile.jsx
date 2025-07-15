@@ -253,7 +253,7 @@ function Profile() {
         
       }
     }
-  },[bookStatus , deleteStatus])
+  },[bookStatus , deleteStatus , purchaseStatus])
 
 
 
@@ -496,8 +496,8 @@ function Profile() {
         {purchaseStatus && <div className='shadow-lg/30 border-gray-200 border rounded py-8 md:px-5 px-2 my-5'>
           {/* one book details/content */}
           {UserBroughtBook?.length > 0 ? 
-          UserBroughtBook?.map( (item) => (
-            <div className='bg-gray-200 p-5 rounded mb-5'>
+          UserBroughtBook?.map( (item , index) => (
+            <div className='bg-gray-200 p-5 rounded mb-5' key={index}>
             {/* book details part */}
             <div className="md:grid grid-cols-[5fr_2fr] gap-x-5">
 

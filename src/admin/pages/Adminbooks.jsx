@@ -97,7 +97,7 @@ function Adminbooks() {
               {allBooks?.length > 0 ? 
               allBooks?.map( (item , index)=> (
 
-                <div className={item?.status == 'Sold' ? 'p-5 flex justify-center items-center flex-col md:mb-10 mb-10 shadow-lg/30 opacity-50' : 'p-5 flex justify-center items-center flex-col md:mb-10 mb-10 shadow-lg/30'} key={index}>
+                <div className={item?.status == 'sold' ? 'p-5 flex justify-center items-center flex-col md:mb-10 mb-10 shadow-lg/30 opacity-80' : 'p-5 flex justify-center items-center flex-col md:mb-10 mb-10 shadow-lg/30'} key={index}>
 
                 <img src={item?.imageUrl} alt="book image" style={{ width: '100%', height: '300px' }} />
 

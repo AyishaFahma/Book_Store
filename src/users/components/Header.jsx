@@ -101,7 +101,7 @@ function Header() {
 
                   <Link to={'/profile'}><a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"><FontAwesomeIcon icon={faUser} className='me-2'/>Profile</a></Link>
 
-                  <a onClick={handleLogout} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
+                  <a onClick={handleLogout}  className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
 
                   
                 </div>
@@ -146,7 +146,7 @@ function Header() {
 
                   <Link to={'/profile'}><a href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"><FontAwesomeIcon icon={faUser} className='me-2'/>Profile</a></Link>
 
-                  <a onClick={handleLogout} href="#" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
+                  <a onClick={handleLogout}  className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0"> < FontAwesomeIcon icon={faPowerOff} className='me-1'/> Logout</a>
 
                   
                 </div>
